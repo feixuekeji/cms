@@ -1,0 +1,51 @@
+{extend name='layouts/cms'}
+{block name='body-content'}
+<form class="layui-form form-opArticle layui-form-pane">
+
+    <input type="hidden" name="id" value="{$article['id']}">
+    <input type="hidden" name="picture" class="menu-icon" value="{$article['picture']}">
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">采集链接：</label>
+        <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="urls" required
+                          lay-verify="required" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    {:token()}
+    <div class="layui-form-item">
+        <div class="layui-input-block div-form-op">
+            <button class="layui-btn" type="button" onclick="ok()">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">放弃</button>
+        </div>
+    </div>
+</form>
+
+{/block}
+
+{block name='single-content'}
+<script src="__CMS__/js/moZhang.js"></script>
+{load file='__EDITOR__/wangEditor.js'}
+
+<script>
+
+
+    //点击事件
+    function ok() {
+        var toUrl = "{:url('admin/collect/url')}";
+        var content=editor.txt.html();
+        var postData = $(".form-opArticle").serialize();
+        ToPostPopupsDeal(toUrl, postData);
+    }
+
+
+</script>
+<script>
+
+
+
+</script>
+{/block}
+
+
+
+

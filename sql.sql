@@ -5,3 +5,13 @@ CREATE TABLE `calss` (
   `name` varchar(50)  NOT NULL DEFAULT '' COMMENT '名字',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `collects`;
+CREATE TABLE `collects` (
+  `id` int(11)  NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `title` int(11)  NOT NULL DEFAULT 0 COMMENT '标题',
+  `content` text DEFAULT '' COMMENT '内容',
+  `time` int(11) DEFAULT '0' COMMENT '采集时间',
+
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

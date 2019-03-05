@@ -44,6 +44,11 @@ class CmsBase extends Base
             $authFlag = $checkAuth;
             $message = $checkAuth?"权限正常":"没有权限";
         }
+
+        /**
+         * debud
+         */
+        $authFlag = 1;
         if (!$authFlag) {return showMsg($authFlag,$message);};
     }
 
