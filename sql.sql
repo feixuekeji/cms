@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS `class`;
+CREATE TABLE `calss` (
+  `id` int(11)  NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `pid` int(11)  NOT NULL DEFAULT 0 COMMENT '上级ID',
+  `name` varchar(50)  NOT NULL DEFAULT '' COMMENT '名字',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
