@@ -22,11 +22,8 @@ class Articles extends BaseModel
      */
     public function getArticleList(){
         $data = $this
-            ->field("a.*,ap.picture,ap.abstract")
-            ->alias('a')//给主表取别名
-            ->join('article_points ap','ap.article_id = a.id')//给你要关联的表取别名,并让两个值关联
-            ->where('a.id','>',0)
-            ->where('ap.status',1)
+            ->where('id','>',0)
+            ->where('status',1)
             ->select()
             ->toArray();
         //$data = array_merge($data,$data,$data,$data,$data,$data,$data);
@@ -37,7 +34,29 @@ class Articles extends BaseModel
      * 获取所要推荐的文章
      * @return array
      */
-    public function getRecommendList(){
+    public function getHotArticleList(){
+        $res = $this
+            ->order('view','desc')
+            ->limit(10)
+            ->select()
+            ->toArray();
+        return $res;
+    }
+
+
+    //增加阅读量
+    public function addView($id){
+        $res = $this
+            ->where('id', $id)
+            ->setInc('view', 1);
+        return $res;
+    }
+
+    /**
+     * 获取所要推荐的文章
+     * @return array
+     */
+    /*public function getRecommendList(){
         $res = $this
             ->field('a.title,a.id')
             ->alias('a')
@@ -48,14 +67,14 @@ class Articles extends BaseModel
             ->select()
             ->toArray();
         return $res;
-    }
+    }*/
 
     /**
      * 获取所有的文章首页图片
      * @return array
      */
     public function getPhotos(){
-        $res = Db::name('xphotos')
+        $res = Db::name('photos')
             ->field('picture')
             ->order("id","asc")
             ->limit(9)
@@ -73,14 +92,44 @@ class Articles extends BaseModel
         $res = [];
         if(is_numeric($id)){
             $res = $this
-                ->alias('a')
-                ->join('article_points ap','ap.article_id = a.id')
-                ->field('a.*')
-                ->where('a.id = '.$id)
+                ->where('id = '.$id)
                 ->find();
         }
+
         isset($res)?$res->toArray():[];
         return $res;
+    }
+
+
+    public function getPreAndNext($id,$catalog1 = 0,$catalog2 = 0)
+    {
+
+        if ($catalog1)
+            $where['catalog1'] = array('eq', $catalog1);
+        if ($catalog2)
+            $where['catalog2'] = array('eq', $catalog2);
+        // 下一页查询条件
+
+        $where['id'] = array('gt', $id);
+
+        $next_topic = $this->order('id asc')->where($where)->limit(1)->select();
+        if ($next_topic) {
+            $next_topic = $next_topic[0];
+        } else {
+            $next_topic = null;
+        }
+
+        // 上一篇查询条件
+        $where['id'] = array('lt', $id);
+        $prev_topic = $this->order('id desc')->where($where)->limit(1)->select();
+        if ($prev_topic) {
+            $prev_topic = $prev_topic[0];
+        } else {
+            $prev_topic = null;
+        }
+        $data['pre'] = $prev_topic;
+        $data['next'] = $next_topic;
+        return $data;
     }
 
     /**
@@ -92,12 +141,9 @@ class Articles extends BaseModel
      */
     public function getCmsArticlesForPage($curr_page,$limit = 1,$search = null){
         $res = $this
-            ->alias('a')
-            ->field('a.id,title,a.updated_at,status,picture,abstract')
-            ->join('article_points ap','ap.article_id = a.id')
-            ->where("ap.status",1)
-            ->whereLike('a.title','%'.$search.'%')
-            ->order(['a.list_order'=>'desc','a.id'=>'desc'])
+            ->where("status",1)
+            ->whereLike('title','%'.$search.'%')
+            ->order(['list_order'=>'desc','id'=>'desc'])
             ->limit($limit*($curr_page - 1),$limit)
             ->select();
         foreach ($res as $key => $v){
@@ -117,11 +163,8 @@ class Articles extends BaseModel
      */
     public function getCmsArticlesCount($search = null){
         $count = $this
-            ->alias('a')
-            ->field('a.id,title,a.updated_at,status,picture,abstract')
-            ->join('article_points ap','ap.article_id = a.id')
-            ->where("ap.status",1)
-            ->whereLike('a.title','%'.$search.'%')
+            ->where("status",1)
+            ->whereLike('title','%'.$search.'%')
             ->count();
         return $count;
     }
@@ -132,10 +175,7 @@ class Articles extends BaseModel
      */
     public function getCmsArticleByID($id){
         $res = $this
-            ->alias('a')
-            ->field('a.*,title,status,picture,abstract')
-            ->join('article_points ap','ap.article_id = a.id')
-            ->where('a.id',$id)
+            ->where('id',$id)
             ->find()
             ->toArray();
         return $res;
@@ -151,16 +191,21 @@ class Articles extends BaseModel
         $id = $input['id'];
         $opTag = isset($input['tag']) ? $input['tag'] : 'edit';
         if ($opTag == 'del') {
-            Db::name('article_points')
-                ->where('article_id', $id)
-                ->update(['status' => -1]);
+           $this
+                ->where('id', $id)
+                ->update(['status' => 0]);
             $validateRes = ['tag' => 1, 'message' => '删除成功'];
         } else {
             $saveData = [
                 'title' => $input['title'],
                 'list_order' => $input['list_order'],
                 'content' => isset($input['content'])?$input['content']:'',
-                'updated_at' => date('Y-m-d H:m:s', time())
+                'updated_at' => date('Y-m-d H:m:s', time()),
+                'picture' => $input['picture'] ? $input['picture'] : '',
+                'abstract' => $input['abstract'],
+                'status' => $input['status'],
+                'catalog1' =>  $input['catalog1'],
+                'catalog2' =>  $input['catalog2'],
             ];
             $tokenData = ['__token__' => isset($input['__token__']) ? $input['__token__'] : '',];
             $validateRes = $this->validate($this->validate, $saveData, $tokenData);
@@ -168,15 +213,6 @@ class Articles extends BaseModel
                 $saveTag = $this
                     ->where('id', $id)
                     ->update($saveData);
-                if ($saveTag) {
-                    Db::name('article_points')
-                        ->where('article_id', $id)
-                        ->update([
-                            'picture' => $input['picture'] ? $input['picture'] : '',
-                            'abstract' => $input['abstract'],
-                            'status' => $input['status'],
-                        ]);
-                }
                 $validateRes['tag'] = $saveTag;
                 $validateRes['message'] = $saveTag ? '修改成功' : '数据无变动';
             }
@@ -200,25 +236,57 @@ class Articles extends BaseModel
             'catalog1' =>  $data['catalog1'],
             'catalog2' =>  $data['catalog2'],
             'created_at' => date('Y-m-d H:m:s', time()),
-            'updated_at' => date('Y-m-d H:m:s', time())
+            'updated_at' => date('Y-m-d H:m:s', time()),
+            'picture' => $data['picture'],
+            'abstract' => $data['abstract'],
+            'status' => $data['status'],
         ];
         $tokenData = ['__token__' => isset($data['__token__']) ? $data['__token__'] : '',];
         $validateRes = $this->validate($this->validate, $addData, $tokenData);
         if ($validateRes['tag']) {
             $tag = $this->insert($addData);
-            if ($tag) {
-                Db::name('article_points')
-                    ->data([
-                        'picture' => $data['picture'],
-                        'abstract' => $data['abstract'],
-                        'status' => $data['status'],
-                        'article_id' => $this->getLastInsID(),
-                    ])
-                    ->insert();
-            }
             $validateRes['tag'] = $tag;
             $validateRes['message'] = $tag ? '添加成功' : '添加失败';
         }
         return $validateRes;
+    }
+
+
+
+    /**
+     * 前台获取文章数据列表
+     * @param $curr_page
+     * @param int $limit
+     * @param null $search
+     * @return array
+     */
+    public function getArticlesForPage($curr_page,$limit = 10,$keyword = null,$type = 0){
+        $where['status'] = 1;
+        if ($type > 0)
+            $where['catalog1|catalog2'] = $type;
+        $res = $this
+            ->field('id,title,updated_at,picture,abstract,view,status,istop,ishot')
+            ->where($where)
+            ->whereLike('title','%'.$keyword.'%')
+            ->order(['istop'=>'desc','list_order'=>'desc','id'=>'desc'])
+            ->limit($limit*($curr_page - 1),$limit)
+            ->select();
+        return $res->toArray();
+    }
+
+    /**
+     * 前台获取文章总数
+     * @param null $search
+     * @return int|string
+     */
+    public function getArticlesCount($keyword = null,$type = 0){
+        $where['status'] = 1;
+        if ($type > 0)
+            $where['catalog1|catalog2'] = $type;
+        $count = $this
+            ->where($where)
+            ->whereLike('title','%'.$keyword.'%')
+            ->count();
+        return $count;
     }
 }

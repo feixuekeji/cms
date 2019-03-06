@@ -44,55 +44,6 @@ class Catalogs extends BaseModel
         return $data;
     }
 
-    /**
-     * 获取所要推荐的文章
-     * @return array
-     */
-    public function getRecommendList(){
-        $res = $this
-            ->field('a.title,a.id')
-            ->alias('a')
-            ->join('article_points ap','ap.article_id = a.id')
-            ->order('ap.view','desc')
-            ->where('ap.status',1)
-            ->limit(6)
-            ->select()
-            ->toArray();
-        return $res;
-    }
-
-    /**
-     * 获取所有的文章首页图片
-     * @return array
-     */
-    public function getPhotos(){
-        $res = Db::name('xphotos')
-            ->field('picture')
-            ->order("id","asc")
-            ->limit(9)
-            ->select();
-        return $res;
-    }
-
-    /**
-     * 根据文章ID 获取文章详情
-     * @param $id
-     * @return array
-     */
-    public function getInfoByID($id)
-    {
-        $res = [];
-        if(is_numeric($id)){
-            $res = $this
-                ->alias('a')
-                ->join('article_points ap','ap.article_id = a.id')
-                ->field('a.*')
-                ->where('a.id = '.$id)
-                ->find();
-        }
-        isset($res)?$res->toArray():[];
-        return $res;
-    }
 
     /**
      * 后台获取数据列表
