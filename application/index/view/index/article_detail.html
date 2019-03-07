@@ -10,13 +10,18 @@
 
 						</div>
 						<hr/>
+                        <span class="layui-breadcrumb" id="location">
+                            <a href="/">首页</a>
+                            <a href="/demo/">演示</a>
+                            <a><cite>导航元素</cite></a>
+                        </span>
 						<div id="divdetail" class="detail-body photos">
 
 						</div>
 
 						<div class="qing-blog-foot am-hide-sm-only">
-							<span class="left"><<<a href="/B20170721175158.html">第三届阿里中间件性能挑战赛 初赛总结</a></span>
-							<span class="right"><a href="/b20170207233513.html">2014年3月CCF真题4 无线网络</a>>></span>
+							<span class="left" id="pre"><<<a href="/B20170721175158.html">无</a></span>
+							<span class="right" id="next"><a href="/b20170207233513.html">无</a>>></span>
 						</div>
 
 						<div class="fly-panel detail-box" id="flyReply">
@@ -55,8 +60,8 @@
 
 						</dl>
 
-						<dl class="fly-panel fly-list-one" id="dlTopResource">
-							<dt class="fly-panel-title">最新分享</dt>
+						<dl class="fly-panel fly-list-one" id="similarArticle">
+							<dt class="fly-panel-title">相关文章</dt>
 
 						</dl>
 
@@ -99,6 +104,7 @@
 
                     GetArticleById()
                     GetTopArticleList();
+                    GetSimilarList();
                     GetTopResourceList();
                     GetOneFuli();
                     GetAdv();
@@ -136,6 +142,8 @@
                             layer.close(index);
                             if(jsondata.status == 0) {
                                 var item = jsondata.data;
+                                var catalog1 = jsondata.catalog1;
+                                var catalog2 = jsondata.catalog2;
                                 //var commentlist = jsondata.Data.detail;
 
                                 $("#h1title").html(item.title);
@@ -152,6 +160,21 @@
                                 $("#divinfo").append('<span class="fly-list-nums"><a href="#comment"><i class="fa fa-commenting" title="回答"></i> ' + commentlist.length + '</a><i class="fa fa-eye" title="浏览"></i> ' + item.Readcount + ' </span>');*/
 
                                 $("#divdetail").html("").html(item.content);
+
+                                $("#location").html("");
+                                $("#location").append('当前位置：<a href="articleList.html?id=' + catalog1.id +'">'+catalog1.name+'</a><span lay-separator="">/</span>');
+
+                                $("#location").append('<a href="articleList.html?id=' + catalog2.id +'">'+catalog2.name+'</a><span lay-separator="">/</span>');
+                                $("#location").append('<a><cite>正文</cite></a>');
+                                if(jsondata.pre) {
+                                    $("#pre").html("");
+                                    $("#pre").append('上一篇<a href="articleDetail.html?id=' + jsondata.pre.id +'">'+jsondata.pre.title+'</a>');
+                                }
+                                if(jsondata.next) {
+                                    $("#next").html("");
+                                    $("#next").append('下一篇<a href="articleDetail.html?id=' + jsondata.next.id +'">'+jsondata.next.title+'</a>');
+                                }
+
                                 $("#jieda").html("");
                                 /*$.each(commentlist, function(index, item) {
                                     var jiedahtml = '';
@@ -182,6 +205,33 @@
                             }
                         }
 
+                    });
+
+                }
+
+                //相关推荐
+
+                function GetSimilarList() {
+                    $.ajax({
+                        url: "{:url('index/index/getSimilarList',['id'=>$id])}",
+                        type: 'get', //GET
+                        async: true, //或false,是否异步
+                        dataType: 'json',
+                        success: function(jsondata) {
+                            if(jsondata.status == 0) {
+                                $("#similarArticle").html("").append('<dt class="fly-panel-title">相关文章</dt>');
+                                $.each(jsondata.data, function(index, item) {
+                                    $("#similarArticle").append('<dd><a href="articleDetail.html?id=' + item.id + '"><i class="fa fa-thumbs-up"></i>' + item.title + '</a></dd>');
+                                });
+
+                            }
+                        },
+                        error: function(xhr, textStatus) {
+
+                        },
+                        complete: function() {
+
+                        }
                     });
 
                 }

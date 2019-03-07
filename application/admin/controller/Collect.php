@@ -6,6 +6,7 @@ use app\common\model\Catalogs;
 use app\api\Controller\Upload;
 use think\Request;
 use think\facade\Env;
+use think\facade\Log;
 
 class Collect extends CmsBase
 {
@@ -48,7 +49,7 @@ class Collect extends CmsBase
             static $num = 0;
             foreach ($urls AS $k =>$url)
             {
-                $data = $this->get_file_article($url);
+                $data = $this->get_file_article(trim($url));
                 if ($data)
                 {
                     $this->model->addArticle($data);
@@ -73,11 +74,10 @@ class Collect extends CmsBase
      */
     function get_file_article($url)
     {
-        $this->dirurl = Env::get('root_path').'public\\Uploads';
 
         $file = get_url($url);
         if(!$file){
-            $this->put_error_log($this->dirurl,$this->fileerr);
+            Log::error('错误信息'.'url错误');
             exit(json_encode(array('msg'=>$this->fileerr,'code'=>500)));
         }
         // 内容
@@ -107,7 +107,8 @@ class Collect extends CmsBase
                     $new[] = $filename;
                 }else{
                     // 失败记录日志
-                    $this->put_error_log($this->dirurl,$this->wximgerr.$v);
+                    Log::error('错误信息',$v);
+
                 }
             }
             $old[] = 'data-src';

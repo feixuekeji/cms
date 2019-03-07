@@ -58,8 +58,38 @@
             checked
             {/if}
             >
-            <input type="radio" name="status" value="-1" title="删除"
-                   {if ($article['status'] == -1)}
+            <input type="radio" name="status" value="0" title="删除"
+                   {if ($article['status'] == 0)}
+            checked
+            {/if};
+            >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">置顶</label>
+        <div class="layui-input-block">
+            <input type="radio" name="istop" value="1" title="是"
+                   {if ($article['istop'] == 1)}
+            checked
+            {/if}
+            >
+            <input type="radio" name="istop" value="0" title="否"
+                   {if ($article['istop'] == 0)}
+            checked
+            {/if};
+            >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">推荐</label>
+        <div class="layui-input-block">
+            <input type="radio" name="ishot" value="1" title="推荐"
+                   {if ($article['ishot'] == 1)}
+            checked
+            {/if}
+            >
+            <input type="radio" name="ishot" value="0" title="不推荐"
+                   {if ($article['ishot'] == 0)}
             checked
             {/if};
             >

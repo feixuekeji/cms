@@ -1,4 +1,99 @@
-<form action="geturl" type="post">
-    <textarea rows="60" cols="80" name="urls"></textarea>
-    <input type="submit" value="ok"/>
-</form>
+﻿{include file="header" /}
+<script type="text/javascript" src="__JS__/index.js"></script>
+		<div class="layui-container">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md8" id="catalogBox">
+					<div class="layui-row grid-demo">
+						<div class="layui-col-md6">
+							<div class="grid-demo grid-demo-bg1">
+								<div class="layui-card">
+									<div class="layui-card-header"> </div>
+									<div class="layui-card-body">
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="fly-panel">
+						<ul class="fly-list" id="ulArticle">
+
+						</ul>
+
+					</div>
+					<div id="page" class="fly-page fly-panel"></div>
+				</div>
+				<div class="layui-col-md4">
+					<div class="layui-card">
+						<div class="layui-card-body layui-row layui-col-space10">
+							<div class=" layui-col-xs8 layui-col-sm8 layui-col-md8">
+								<input id="inputkey" type="text"  placeholder="输入内容搜索"  class="layui-input">
+							</div>
+							<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+								<button id="btnsearch" class="layui-btn layui-btn-primary">
+									<i class="layui-icon layui-icon-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="fly-panel myinfo">
+						<img id="myhead" class="myavatar" src="images/me.jpg" onerror="errorFigure(this)" alt="joy" />
+
+						<p id="myname" class="mynickname"></p>
+						<p id="oneword" class="myintroduce"></p>
+						<p class="mylocation"><i class="fa fa-location-arrow"></i>&nbsp;<span id="myaddress"></span></p>
+						<hr />
+						<div id="mylink" class="mylink">
+						</div>
+					</div>
+
+					<div class="fly-panel ">
+						<div class="fly-panel-title">
+							网站公告
+						</div>
+
+						<ul id="ulAnnouncement" class="layui-timeline fly-panel-main">
+
+						</ul>
+
+					</div>
+					<dl class="fly-panel fly-list-one" id="dlFuli">
+						<dt class="fly-panel-title">今日福利</dt>
+
+					</dl>
+
+					<dl class="fly-panel fly-list-one" id="dlTopArticle">
+						<dt class="fly-panel-title">热文排行</dt>
+
+					</dl>
+
+					<dl class="fly-panel fly-list-one" id="dlTopResource">
+						<dt class="fly-panel-title">最新分享</dt>
+
+					</dl>
+
+					<div class="fly-panel">
+						<div class="fly-panel-title">
+							广而告之
+						</div>
+						<div class="fly-panel-main" id="divAdv">
+
+						</div>
+					</div>
+
+					<div class="fly-panel fly-link">
+						<h3 class="fly-panel-title">友情链接</h3>
+						<dl id="dlFriendlink" class="fly-panel-main">
+
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+{include file="footer" /}

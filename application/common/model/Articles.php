@@ -30,6 +30,23 @@ class Articles extends BaseModel
         return $data;
     }
 
+
+    public function getSimilarList($title){
+        $all_list = $this
+            ->field('id,title')
+            ->where('id','>',0)
+            ->where('status',1)
+            ->select()
+            ->toArray();
+        foreach ($all_list AS $k => $v)
+        {
+            $similar[$k]  = similar_text($v['title'], $title, $persent);
+        }
+        array_multisort($similar, SORT_DESC, $all_list);
+        $output = array_slice($all_list, 0,6);
+        return $output;
+    }
+
     /**
      * 获取所要推荐的文章
      * @return array
@@ -44,7 +61,12 @@ class Articles extends BaseModel
     }
 
 
-    //增加阅读量
+
+
+    /**增加阅读量
+     * @param $id
+     * @return int|true
+     */
     public function addView($id){
         $res = $this
             ->where('id', $id)
@@ -101,18 +123,17 @@ class Articles extends BaseModel
     }
 
 
-    public function getPreAndNext($id,$catalog1 = 0,$catalog2 = 0)
+    public function getPreAndNext($id,$catalog = 0)
     {
 
-        if ($catalog1)
-            $where['catalog1'] = array('eq', $catalog1);
-        if ($catalog2)
-            $where['catalog2'] = array('eq', $catalog2);
+        if ($catalog)
+            $where[] = array('catalog1|catalog2','=', $catalog);
+
         // 下一页查询条件
 
-        $where['id'] = array('gt', $id);
+        $where[] = array('id','>', $id);
 
-        $next_topic = $this->order('id asc')->where($where)->limit(1)->select();
+        $next_topic = $this->order('id asc')->where($where)->limit(1)->select()->toArray();
         if ($next_topic) {
             $next_topic = $next_topic[0];
         } else {
@@ -120,8 +141,9 @@ class Articles extends BaseModel
         }
 
         // 上一篇查询条件
-        $where['id'] = array('lt', $id);
-        $prev_topic = $this->order('id desc')->where($where)->limit(1)->select();
+        array_pop($where);
+        $where[] = array('id','<', $id);
+        $prev_topic = $this->order('id desc')->where($where)->limit(1)->select()->toArray();
         if ($prev_topic) {
             $prev_topic = $prev_topic[0];
         } else {
@@ -206,6 +228,8 @@ class Articles extends BaseModel
                 'status' => $input['status'],
                 'catalog1' =>  $input['catalog1'],
                 'catalog2' =>  $input['catalog2'],
+                'istop' =>  $input['istop'],
+                'ishot' =>  $input['ishot'],
             ];
             $tokenData = ['__token__' => isset($input['__token__']) ? $input['__token__'] : '',];
             $validateRes = $this->validate($this->validate, $saveData, $tokenData);

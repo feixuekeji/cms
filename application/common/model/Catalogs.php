@@ -16,7 +16,7 @@ class Catalogs extends BaseModel
     }
 
     /**
-     * 获取所有的文章
+     * 获取所有
      * @return array
      */
     public function getCatalogList(){
@@ -142,6 +142,9 @@ class Catalogs extends BaseModel
     }
 
 
+    /**树形列表
+     * @return array
+     */
     public function getCatalogTree(){
         $cateres = $this->select();
         return $this->sort($cateres);
