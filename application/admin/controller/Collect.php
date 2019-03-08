@@ -40,7 +40,7 @@ class Collect extends CmsBase
     }
 
 
-    public function url(Request $request)
+/*    public function url(Request $request)
     {
         if ($request->isPost()){
 
@@ -60,8 +60,29 @@ class Collect extends CmsBase
             }
             echo "共采集".$num;
 
-           /* $list['num'] = $num;
-            return showMsg(1,'success',$list);*/
+
+        }else {
+            return view('url');
+        }
+    }*/
+
+
+    public function url(Request $request)
+    {
+        if ($request->isPost()){
+
+            $url = $request->post('url');
+
+
+                $data = $this->get_file_article(trim($url));
+                if ($data)
+                {
+                    $this->model->addArticle($data);
+                    $message = $data['title']."采集完成\n";
+                    return showMsg(1,$message);
+                }
+
+
         }else {
             return view('url');
         }
@@ -78,7 +99,7 @@ class Collect extends CmsBase
         $file = get_url($url);
         if(!$file){
             Log::error('错误信息'.'url错误');
-            exit(json_encode(array('msg'=>$this->fileerr,'code'=>500)));
+            return false;
         }
         // 内容
         preg_match('/<div class="rich_media_content " id="js_content">[\s\S]*?<\/div>/',$file,$content);
@@ -97,23 +118,25 @@ class Collect extends CmsBase
         $new = array();
         // 去除重复图片地址
         $images = array_unique($images[1]);
+
         if($images){
             foreach($images as $v){
-                //$filename = $this->put_file_img($this->dirurl,$v);
-                $filename = $this->upload->qiniu_upload($v);
+
+                $filename = $this->upload->qiniuFetch($v);
                 if($filename){
                     // 图片保存成功 替换地址
                     $old[] = $v;
                     $new[] = $filename;
                 }else{
                     // 失败记录日志
-                    Log::error('错误信息',$v);
+                    Log::error('错误信息'.$v);
 
                 }
             }
             $old[] = 'data-src';
             $new[] = 'src';
             $content = str_replace($old,$new,$content[0]);
+
         }
 
 
@@ -129,7 +152,7 @@ class Collect extends CmsBase
         if ($request->isPost()){
             $curr_page = $request->post('curr_page',1);
             $search = $request->post('str_search');
-            $list = $this->model->getCmsArticlesForPage($curr_page,$this->page_limit,$search);
+            $list = $this->model->getArticlesForPage($curr_page,$this->page_limit,$search);
             return showMsg(1,'success',$list);
         }else{
             return showMsg(0,'sorry，请求不合法');

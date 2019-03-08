@@ -1,22 +1,27 @@
 {extend name='layouts/cms'}
 {block name='body-content'}
-<form class="layui-form form-opArticle layui-form-pane" method="post">
+<ul class="layui-timeline" id="progress">
+
+
+</ul>
+<form class="layui-form form-opArticle layui-form-pane" >
 
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">采集链接：</label>
         <div class="layui-input-block">
-                <textarea rows="20" placeholder="请输入内容" name="urls" required
+                <textarea rows="15" placeholder="请输入内容" name="urls" id="urls" required
                           lay-verify="required" class="layui-textarea"></textarea>
         </div>
     </div>
     {:token()}
     <div class="layui-form-item">
         <div class="layui-input-block div-form-op">
-            <button class="layui-btn" type="submit" >提交</button>
+            <button class="layui-btn" type="button" onclick="ok()">提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">放弃</button>
         </div>
     </div>
 </form>
+
 
 {/block}
 
@@ -26,22 +31,38 @@
 
 <script>
 
-
-    //点击事件
     function ok() {
+        $("#catalogBox").html("开始采集");
         var toUrl = "{:url('admin/collect/url')}";
-        var content=editor.txt.html();
-        var postData = $(".form-opArticle").serialize();
-        ToPostPopupsDeal(toUrl, postData);
+
+        var str=$("#urls").val();
+        var urls=str.split('\n');
+        for(var i=0;i<urls.length;i++)
+        {
+            var postData = {
+                url: urls[i],
+            };
+
+            $.post(
+                toUrl,
+                postData,
+                function (result) {
+                    var lihtml = '<li class="layui-timeline-item">\n' +
+                        '        <i class="layui-icon layui-timeline-axis"></i>\n' +
+                        '        <div class="layui-timeline-content layui-text">\n' +
+                        '            <div class="layui-timeline-title">'+result.message+'</div>\n' +
+                        '        </div>\n' +
+                        '    </li>';
+                    $("#progress").append(lihtml);
+                },"JSON");
+        }
     }
 
 
-</script>
-<script>
-
 
 
 </script>
+
 {/block}
 
 

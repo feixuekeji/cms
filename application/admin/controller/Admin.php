@@ -121,7 +121,7 @@ class Admin extends CmsBase
             $opRes = $this->ar_model->addRole($input);
             return showMsg($opRes['tag'],$opRes['message']);
         }else{
-            //TODO 获取所有可以分配的权限菜单
+            // 获取所有可以分配的权限菜单
             $viewMenus = $this->menuModel->getNavMenus();
             return view('add_role',[
                 'menus'=>$viewMenus,
@@ -142,7 +142,7 @@ class Admin extends CmsBase
             $opRes = $this->ar_model->editRole($id,$input);
             return showMsg($opRes['tag'],$opRes['message']);
         }else{
-            //TODO 获取所有可以分配的权限菜单
+            //获取所有可以分配的权限菜单
             $viewMenus = $this->menuModel->getNavMenus();
             $arrMenuSelf = explode('|',$roleData['nav_menu_ids']);
             return view('edit_role',[

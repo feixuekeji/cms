@@ -71,7 +71,7 @@ class Login
         if ($request->isPost()){
             $cmsAID = Session::get('AID');
             $nav_menu_id = $request->param('nav_menu_id');
-            //TODO 判断当前菜单是否属于他的权限内
+            //判断当前菜单是否属于他的权限内
             $checkTag = $this->navMenuModel->checkNavMenuMan($nav_menu_id,$cmsAID);
             if ($cmsAID && $checkTag){
                 return showMsg(1,'正在登录状态');

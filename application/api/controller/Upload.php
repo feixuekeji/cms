@@ -2,14 +2,29 @@
 
 namespace app\api\Controller;
 
+use think\Controller;
 use think\Request;
 use Config;
 use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;
 use Qiniu\Storage\BucketManager;
 
-class Upload
+class Upload extends Controller
 {
+    private $config;
+    private $accessKey;
+    private $secretKey;
+    private $bucket;
+
+    public function __construct()
+    {
+        $this->config = Config::get('UPLOAD_Qiniu_CONFIG');
+        $this->accessKey = $this->config['accessKey'];
+        $this->secretKey = $this->config['secretKey'];
+        $this->bucket = $this->config['bucket'];
+
+    }
+
     public function img_file(Request $request)
     {
         $status = 0;
@@ -72,6 +87,29 @@ class Upload
 
 
     }
+
+
+    /**
+     *
+     * 七牛云存储图片网络资源
+     *
+     */
+    public function qiniuFetch($url){
+        $auth = new Auth($this->accessKey, $this->secretKey);
+        $bucketManager = new BucketManager($auth);
+        $key = md5(time().rand(10000,99999)).'.png';
+
+        // 指定抓取的文件保存名称
+        list($ret, $err) = $bucketManager->fetch($url, $this->bucket, $key);
+        if ($err === null) {
+            $url = $this->config['domain'].$ret['key'];
+            return $url;
+        }
+
+
+    }
+
+
 
 
 

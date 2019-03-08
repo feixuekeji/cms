@@ -53,6 +53,10 @@ class Collects extends BaseModel
             ->order(['id'=>'desc'])
             ->limit($limit*($curr_page - 1),$limit)
             ->select();
+        foreach ($res as $key => &$v){
+            $v['time'] = date('Y-m-d H:i', $v['time']);
+
+        }
 
         return $res->toArray();
     }
@@ -116,5 +120,23 @@ class Collects extends BaseModel
             $validateRes['tag'] = $tag;
             $validateRes['message'] = $tag ? '添加成功' : '添加失败';
         return $validateRes;
+    }
+
+    /**
+     * 后台获取文章数据列表
+     * @param $curr_page
+     * @param int $limit
+     * @param null $search
+     * @return array
+     */
+    public function getCmsArticlesForPage($curr_page,$limit = 1,$search = null){
+        $res = $this
+            ->where("status",1)
+            ->whereLike('title','%'.$search.'%')
+            ->order(['id'=>'desc'])
+            ->limit($limit*($curr_page - 1),$limit)
+            ->select();
+
+        return $res->toArray();
     }
 }

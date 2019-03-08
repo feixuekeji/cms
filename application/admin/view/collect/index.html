@@ -127,7 +127,47 @@
         var toUrl = "{:url('admin/collect/ajaxOpForPage')}";
         $(".curr_page").val(curr_page);
         var postData = $(".form-search").serialize();
-        ToAjaxOpForPageArticles(toUrl, postData);
+        AjaxOpForPageArticles(toUrl, postData);
+    }
+
+
+    function AjaxOpForPageArticles(toUrl,postData) {
+        $.post(
+            toUrl,
+            postData,
+            function (result) {
+                if(result.status == 1){
+                    var str_html = '';
+                    $.each(result.data,function (i,e) {
+                        str_html +=
+                            "<tr class=\"tr-article-"+e.id+"\">\n" +
+                            "                <td>"+e.id+"</td>\n" +
+                            "                <td>"+e.title+"</td>\n" +
+                            "                <td>"+e.time +"</td>\n" +
+                            "                <td>\n" +
+                            "                    <div class=\"layui-btn-group\">\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"editArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe642;</i>\n" +
+                            "                        </button>\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"delArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe640;</i>\n" +
+                            "                        </button>\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"addToArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe605;</i>\n" +
+                            "                        </button>\n" +
+                            "                    </div>\n" +
+                            "                </td>\n" +
+                            "            </tr>";
+                    });
+                    $(".tbody-articles").html(str_html);
+                }else{
+                    //失败
+                    layer.msg(result.message);
+                }
+            },"JSON");
     }
 </script>
 {/block}

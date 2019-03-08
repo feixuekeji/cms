@@ -101,7 +101,7 @@ class NavMenu extends CmsBase
         if($id == 0) $id=$request->param('id');
         $menuData = $this->menuModel->getNavMenuByID($id);
         if ($request->isPost()){
-            //TODO 修改对应的菜单
+            //修改对应的菜单
             $input = $request->post();
             $opRes = $this->menuModel->editNavMenu($input['id'],$input);
             return showMsg($opRes['tag'],$opRes['message']);
