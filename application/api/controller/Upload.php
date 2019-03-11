@@ -15,6 +15,7 @@ class Upload extends Controller
     private $accessKey;
     private $secretKey;
     private $bucket;
+    private $auth;
 
     public function __construct()
     {
@@ -22,10 +23,11 @@ class Upload extends Controller
         $this->accessKey = $this->config['accessKey'];
         $this->secretKey = $this->config['secretKey'];
         $this->bucket = $this->config['bucket'];
+        $this->auth = new Auth($this->accessKey, $this->secretKey);
 
     }
 
-    public function img_file(Request $request)
+/*    public function img_file(Request $request)
     {
         $status = 0;
         $data = [];
@@ -45,7 +47,47 @@ class Upload extends Controller
             $message = "参数错误";
         }
         return showMsg($status, $message,$data);
+    }*/
+
+
+    /**文章配图上传七牛
+     * @param Request $request
+     */
+
+    public function img_file(Request $request)
+    {
+        $status = 0;
+        $data = [];
+        $file= request()->file('file');
+        if ($file) {
+
+            $filePath = $file->getRealPath();
+            $token = $this->auth->uploadToken($this->bucket);// 生成上传 Token
+
+            $key = md5(time().rand(10000,99999)).'.png';
+
+            // 初始化 UploadManager 对象并进行文件的上传
+            $uploadMgr = new UploadManager();
+
+            // 调用 UploadManager 的 putFile 方法进行文件的上传
+            list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+            if ($err === null) {
+                $data['url'] = $this->config['domain'].$ret['key'];
+                $status = 1;
+                $message = '上传成功';
+            }
+            else{
+                $message = "上传失败 ".$file->getError();
+            }
+
+        } else{
+            $message = "参数错误 ".$file->getError();
+        }
+        return showMsg($status, $message,$data);
+
     }
+
+
 
 
     /**
@@ -95,8 +137,7 @@ class Upload extends Controller
      *
      */
     public function qiniuFetch($url){
-        $auth = new Auth($this->accessKey, $this->secretKey);
-        $bucketManager = new BucketManager($auth);
+        $bucketManager = new BucketManager($this->auth);
         $key = md5(time().rand(10000,99999)).'.png';
 
         // 指定抓取的文件保存名称
@@ -125,11 +166,6 @@ class Upload extends Controller
         if(!$isImage){
             return false;
         }
-        $config = Config::get('UPLOAD_Qiniu_CONFIG');
-        $accessKey = $config['accessKey'];
-        $secretKey = $config['secretKey'];
-        $auth = new Auth($accessKey, $secretKey);
-        $bucket = $config['bucket'];// 要上传的空间
 
         $config1 = new \Qiniu\Config();
 
@@ -137,10 +173,10 @@ class Upload extends Controller
 
 
         // 管理资源
-        $bucketManager = new BucketManager($auth, $config1);
+        $bucketManager = new BucketManager($this->auth, $config1);
 
         // 删除文件操作
-        $res = $bucketManager->delete($bucket, $delFileName);
+        $res = $bucketManager->delete($this->bucket, $delFileName);
 
         if (is_null($res)) {
             // 为null成功
@@ -173,7 +209,6 @@ class Upload extends Controller
                 'type' => 0,
             ];
         }
-        //unlink($filePath);
         echo json_encode($arr);
         exit();
     }

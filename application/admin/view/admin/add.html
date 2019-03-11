@@ -102,7 +102,7 @@
             , exts: 'jpg|png|gif' //设置一些后缀，用于演示前端验证和后端的验证
             //,auto:false //选择图片后是否直接上传
             //,accept:'images' //上传文件类型
-            , url: '/api/upload/img_file'
+            , url: "{:url('api/upload/img_file')}"
             , data: {'_token': tag_token}
             , before: function (obj) {
                 //预读本地文件示例，不支持ie8

@@ -7,17 +7,20 @@ use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;
 use app\index\controller\Upload;
 use think\config;
+use think\facade\Cache;
+use Redis;
 
 
 
 
-class Index extends Controller
+class Test extends Controller
 {
 
     private   $wximgerr= '图片下载失败=>';
     private   $direrr  = '文件夹创建失败！';
     private   $fileerr = '资源不存在！';
     private   $dirurl  = '';
+    private   $redis  = '';
     public function index()
     {
         $data = db('article')->select();
@@ -287,6 +290,28 @@ public function test()
             exit();
         }
 
+    public function redis(){
+
+        Cache::store('redis')->set('sfdsf','yingying',1000000);
+        $a = Cache::store('redis')->get('sfdsf');
+        $this->redis = Cache::store('redis')->handler();
+        $r = $this->redis->rpush('st_info','v1','v2');
+        $res = $this->redis->get('st_info');
+
+        $r = $this->redis->rpush('d1_list','v3','v4');
+        $r = $this->redis->rpush('d1_list','v5','v6');
+        $p = $this->redis->lpop('d1_list');
+        $p = $this->redis->lrange('d1_list',0,5);
+    }
+
+
+
+    public function test1()
+    {
+        $a = 'var nickname = "21世纪经济报道";';
+	preg_match('/var nickname = "[\s\S]*?"/',$a,$wxgzh);
+	var_dump($wxgzh);
+    }
 
 
 }

@@ -26,12 +26,16 @@
         <col width="5%">
         <col width="20%">
         <col width="10%">
+        <col width="10%">
+        <col width="10%">
         <col width="15%">
     </colgroup>
     <thead>
     <tr>
         <th>ID</th>
         <th>标题</th>
+        <th>封面</th>
+        <th>采集人</th>
         <th>时间</th>
         <th>操作(编辑/删除/选入文章)</th>
     </tr>
@@ -41,6 +45,10 @@
     <tr class="tr-article-{$vo['id']}">
         <td>{$vo['id']}</td>
         <td>{$vo['title']}</td>
+        <td class="td-article">
+            <img src="{$vo['picture']}" class="">
+        </td>
+        <td>{$vo['user_name']}</td>
         <td>{$vo['time']}</td>
         <td>
             <div class="layui-btn-group">
@@ -143,6 +151,8 @@
                             "<tr class=\"tr-article-"+e.id+"\">\n" +
                             "                <td>"+e.id+"</td>\n" +
                             "                <td>"+e.title+"</td>\n" +
+                            "                <td class=\"td-article\"><img src='"+e.picture+"'></td>\n" +
+                            "                <td>"+e.user_name +"</td>\n" +
                             "                <td>"+e.time +"</td>\n" +
                             "                <td>\n" +
                             "                    <div class=\"layui-btn-group\">\n" +

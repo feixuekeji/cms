@@ -103,13 +103,21 @@ class Collect extends CmsBase
         }
         // 内容
         preg_match('/<div class="rich_media_content " id="js_content">[\s\S]*?<\/div>/',$file,$content);
+        if (empty($content[0]))
+            return false;
         // 标题
         preg_match('/<title>([\s\S]*?)<\/title>/',$file,$title);
         $title = $title?$title[1]:'';
         $title = trim($title);
+        //微信公众号
+        preg_match('/var nickname = "([\s\S]*?)"/',$file,$wxgzh);
+        $wxgzh = $wxgzh?$wxgzh[1]:'';
+        //封面图片
+        preg_match('/var msg_cdn_url = "([\s\S]*?)"/',$file,$picture);
+        $picture = $picture?$picture[1]:'';
+        $picture = $this->upload->qiniuFetch($picture);
 
-        if (empty($content[0]))
-            return false;
+
 
         // 图片
         preg_match_all('/<img.*?data-src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png|\.jpeg|\.?]))[\'|\"].*?[\/]?>/',$content[0],$images);
@@ -140,7 +148,7 @@ class Collect extends CmsBase
         }
 
 
-        $data = array('content'=>$content,'title'=>$title);
+        $data = array('content'=>$content,'title'=>$title,'wxgzh' =>$wxgzh,'picture' => $picture);
         //return json_encode(array('data'=>$data,'code'=>200,'msg'=>'ok'));
         return $data;
     }

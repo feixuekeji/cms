@@ -34,11 +34,11 @@
             <button type="button" name="img_upload" class="layui-btn btn_upload_img">
                 <i class="layui-icon">&#xe67c;</i>上传图片
             </button>
-            <img class="layui-upload-img img-upload-view" src="">
+            <img class="layui-upload-img img-upload-view" src="{$article['picture']}">
         </div>
     </div>
 
-    <input type="hidden" name="picture" class="menu-icon" value="">
+    <input type="hidden" name="picture" class="menu-icon" value="{$article['picture']}">
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">文章摘要：</label>
         <div class="layui-input-block">

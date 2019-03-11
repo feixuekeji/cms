@@ -5,12 +5,7 @@ use app\common\model\Admins;
 use think\facade\Session;
 use think\Request;
 
-/**
- * Created by PhpStorm.
- * User: moTzxx
- * Date: 2018/1/23
- * Time: 15:54
- */
+
 class Index{
     private $menuModel;
     private $adminModel;

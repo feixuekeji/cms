@@ -2,6 +2,7 @@
 namespace app\common\model;
 use think\Db;
 use \think\Model;
+use think\facade\Session;
 
 
 class Collects extends BaseModel
@@ -49,8 +50,11 @@ class Collects extends BaseModel
      */
     public function getArticlesForPage($curr_page,$limit = 1,$search = null){
         $res = $this
-            ->whereLike('title','%'.$search.'%')
-            ->order(['id'=>'desc'])
+            ->alias('c')
+            ->field('c.*,a.user_name')
+            ->leftJoin('admins a','c.admin_id = a.id')
+            ->whereLike('c.title','%'.$search.'%')
+            ->order(['c.id'=>'desc'])
             ->limit($limit*($curr_page - 1),$limit)
             ->select();
         foreach ($res as $key => &$v){
@@ -114,6 +118,9 @@ class Collects extends BaseModel
         $addData = [
             'title' => $data['title'],
             'content' => isset($data['content'])?$data['content']:'',
+            'wxgzh' => $data['wxgzh'],
+            'picture' => $data['picture'],
+            'admin_id' => Session::get('AID'),
             'time' => time(),
         ];
             $tag = $this->insert($addData);

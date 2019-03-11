@@ -46,7 +46,7 @@
     {volist name="articles" id="vo"}
     <tr class="tr-article-{$vo['id']}">
         <td>{$vo['id']}</td>
-        <td>《{$vo['title']}》</td>
+        <td><a href="{:url('index/index/articleDetail',array('id'=>$vo['id']))}" target="_blank">{$vo['title']}</a></td>
         <td class="td-article">
             <img src="{$vo['picture']}" class="">
         </td>
