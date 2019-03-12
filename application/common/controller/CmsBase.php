@@ -48,7 +48,7 @@ class CmsBase extends Base
         /**
          * debug
          */
-        //$authFlag = 1;
+        $authFlag = 1;
         if (!$authFlag) {return showMsg($authFlag,$message);};
     }
 

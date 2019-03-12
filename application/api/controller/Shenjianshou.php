@@ -43,11 +43,12 @@ class Shenjianshou extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         curl_setopt($ch, CURLOPT_URL, $url);
-
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $res = curl_exec($ch);
         curl_close($ch);
 
-        $res = json_decode($res);
+        $res = json_decode($res,true);
         return $res;
 
     }
@@ -57,7 +58,7 @@ class Shenjianshou extends Controller
      * @param $weixinId
      * @return mixed
      */
-    public function getPoints($articleUrl)
+    public function getView($articleUrl)
     {
 
         $url = $this->points_url;
@@ -74,12 +75,78 @@ class Shenjianshou extends Controller
 
         curl_setopt($ch, CURLOPT_URL, $url);
 
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
         $res = curl_exec($ch);
         curl_close($ch);
 
-        $res = json_decode($res);
+        $res = json_decode($res,true);
         return $res;
 
     }
+
+
+    /**万维API获取
+     * @param $weixinId
+     * @return mixed
+     */
+    public function getNew($weixinId)
+    {
+        //md5签名方式--非简单签名
+
+        $showapi_appid = '89229';  //替换此值,在官网的"我的应用"中找到相关值
+        $showapi_secret = '91be6ea1edb240e69a6cbe39e1c9b472';  //替换此值,在官网的"我的应用"中找到相关值
+        $paramArr = array(
+            'showapi_appid' => $showapi_appid,
+            'query' => $weixinId,
+            //添加其他参数
+        );
+
+        //创建参数(包括签名的处理)
+        $param = $this->createParam($paramArr, $showapi_secret);
+        $url = 'http://route.showapi.com/582-8?' . $param;
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept-Encoding:gzip'));
+
+        curl_setopt($ch, CURLOPT_ENCODING, "gzip");
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+       /* curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);*/
+
+        $res = curl_exec($ch);
+        curl_close($ch);
+
+        $res = json_decode($res,true);
+        return $res;
+
+
+    }
+
+    function createParam($paramArr, $showapi_secret)
+    {
+        $paraStr = "";
+        $signStr = "";
+        ksort($paramArr);
+        foreach ($paramArr as $key => $val) {
+            if ($key != '' && $val != '') {
+                $signStr .= $key . $val;
+                $paraStr .= $key . '=' . urlencode($val) . '&';
+            }
+        }
+        $signStr .= $showapi_secret;//排好序的参数加上secret,进行md5
+        $sign = strtolower(md5($signStr));
+        $paraStr .= 'showapi_sign=' . $sign;//将md5后的值作为参数,便于服务器的效验
+        return $paraStr;
+    }
+
+
+
+
 
 }

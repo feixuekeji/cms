@@ -1,0 +1,54 @@
+{extend name='layouts/cms'}
+{block name='body-content'}
+<form class="layui-form form-opArticle layui-form-pane">
+    <div class="layui-form-item">
+        <label class="layui-form-label">公众号昵称：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="weixin_nickname" required lay-verify="required"
+                   value="{$weixin['weixin_nickname']}"
+                   placeholder="请输入标题" autocomplete="off" class="layui-input article-title">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">微信号：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="weixin_id" required lay-verify="required"
+                   value="{$weixin['weixin_id']}"
+                   placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <input type="hidden" name="id" value="{$weixin['id']}">
+
+    {:token()}
+    <div class="layui-form-item">
+        <div class="layui-input-block div-form-op">
+            <button class="layui-btn" type="button" onclick="edit({$weixin['id']})">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">放弃</button>
+        </div>
+    </div>
+</form>
+
+{/block}
+
+{block name='single-content'}
+<script src="__CMS__/js/moZhang.js"></script>
+
+<script>
+
+
+    //修改按钮的点击事件
+    function edit(id) {
+        var toUrl = "{:url('admin/subscription/edit',['id'=>'AID'])}";
+        toUrl = toUrl.replace('AID', id);
+        var postData = $(".form-opArticle").serialize();
+        ToPostPopupsDeal(toUrl, postData);
+    }
+
+</script>
+
+{/block}
+
+
+
+

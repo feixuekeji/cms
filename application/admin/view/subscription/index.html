@@ -1,0 +1,110 @@
+{extend name="layouts/cms"}
+
+{block name='body-content'}
+
+<button class="layui-btn layui-btn-normal"
+        onclick="add()">
+    <i class="layui-icon">&#xe608;</i> 新增公众号
+</button>
+
+
+<table class="layui-table table-body" lay-even="" lay-skin="row">
+    <colgroup>
+        <col width="5%">
+        <col width="20%">
+        <col width="10%">
+        <col width="10%">
+        <col width="15%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>昵称</th>
+        <th>微信号</th>
+        <th>更新时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody class="tbody-articles">
+    {volist name="list" id="vo"}
+    <tr class="tr-article-{$vo['id']}">
+        <td>{$vo['id']}</td>
+        <td>{$vo['weixin_nickname']}</td>
+        <td>{$vo['weixin_id']}</td>
+        <td>{$vo['time']|date='Y-m-d H:i'}</td>
+        <td>
+            <div class="layui-btn-group">
+                <button class="layui-btn layui-btn-sm"
+                        onclick="edit('{$vo['id']}')">
+                    <i class="layui-icon">&#xe642;</i>
+                </button>
+                <button class="layui-btn layui-btn-sm"
+                        onclick="del('{$vo['id']}')">
+                    <i class="layui-icon">&#xe640;</i>
+                </button>
+            </div>
+        </td>
+    </tr>
+    {/volist}
+    </tbody>
+</table>
+<div id="demo2-1"></div>
+{/block}
+
+{block name='single-content'}
+<script src="__CMS__/js/articles.js"></script>
+<script src="__CMS__/js/moZhang.js"></script>
+<script>
+    layui.use(['laypage', 'layer'], function () {
+        var laypage = layui.laypage;
+        var page_limit = $(".page_limit").val();
+        var record_num = $(".record_num").val();
+        laypage.render({
+            elem: 'demo2-1'
+            , limit: page_limit
+            , count: record_num
+            , jump: function (obj, first) {
+                //obj包含了当前分页的所有参数
+                //首次不执行
+                if (!first) {
+                    //layer.msg(obj.curr);
+                    ajaxOpForPage(obj.curr);
+                }
+            }
+            , theme: '#FF5722'
+        });
+    });
+</script>
+<script>
+    //根据菜单ID 删除菜单记录
+    function del(id) {
+        var toUrl = "{:url('admin/subscription/edit',['id'=>'AID'])}";
+        toUrl = toUrl.replace('AID', id);
+        ToDelItem(id, toUrl, '.tr-article-' + id);
+    }
+
+    $(".btn-search-navMenu").on('click', function () {
+          $(".form-search").submit();
+    });
+
+    //添加导航菜单
+    function add() {
+        var toUrl = "{:url('admin/subscription/add')}";
+        ToOpenPopups(toUrl, '✚ 添加', '', '76%');
+    }
+
+    //根据菜单ID修改菜单信息
+    function edit(id) {
+        var toUrl = "{:url('admin/subscription/edit',['id'=>'AID'])}";
+        toUrl = toUrl.replace('AID', id);
+        ToOpenPopups(toUrl, '✎ 文章修改', '', '76%');
+    }
+    //通过ajax 获取分页数据
+    function ajaxOpForPage(curr_page) {
+        var toUrl = "{:url('admin/subscription/ajaxOpForPage')}";
+        $(".curr_page").val(curr_page);
+        var postData = $(".form-search").serialize();
+        ToAjaxOpForPageArticles(toUrl, postData);
+    }
+</script>
+{/block}

@@ -1,0 +1,112 @@
+Array
+(
+    [showapi_res_error] => 
+    [showapi_res_id] => 914e27387d684d7b919c641d7676aecc
+    [showapi_res_code] => 0
+    [showapi_res_body] => Array
+        (
+            [ret_code] => 0
+            [userLogo] => https://img01.sogoucdn.com/app/a/100520090/oIWsFt7lgrEFQQqOIkOTVaYT9xhs
+            [code2img] => https://mp.weixin.qq.com/rr?src=3&timestamp=1552374766&ver=1&signature=Ej6KmFdC-x7iMMpJUaDWO5LJ*Jbgc5eFgmN-dGgKF3q6JmXtSG6XYNooeJ1zADagpKpOAX4bA0UTHGdLipJjFXzyLqmXu62s2x7hMK5poaI=
+            [weiNum] => gcgc100
+            [authName] => 西安筑联网络科技有限公司
+            [newArticle_title] => 钢筋绑扎成这样，才算是鲁班奖工程！..
+            [introduce] => 工程人交流、学习、发布工程信息平台
+            [list] => Array
+                (
+                    [0] => Array
+                        (
+                            [title] => 钢筋绑扎成这样，才算是鲁班奖工程！..
+                            [time] => 2019-03-11 19:48:23
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_png/t0ZI6N9E1JOenHzsOra9XX9aLMiaMCEov6rFuGpwGbke3AnYUo14bvjhsgvTfiaH3ibS6C5t5cibicaUpP0CBKJ90SQ/0?wx_fmt=png
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965443&idx=1&sn=4471fdf57d2d40cbacb1bda4f2442710&chksm=8bca40babcbdc9acb4584f087f4f5107116da18f532db94645873740193223ddf2201041a655&scene=27#wechat_redirect
+                        )
+
+                    [1] => Array
+                        (
+                            [title] => 工程施工劳务承包价格（2019年2月最新更新）很详细
+                            [time] => 2019-03-08 19:00:13
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/jQ1wTDKRFYGKfaictZZFe9JZSIMTPnAqlkibGlmOp4yKX7IVDm8GMaK0vpGBhRYcA7KRFfRIlUNJxP39pdR5rc9A/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965441&idx=1&sn=45383c2f94acf9f76aedf206e1e18558&chksm=8bca40b8bcbdc9ae04f9f05b0dd831da3236c2eaacf58bb8d54b297dbbe4e252def4632c2aee&scene=27#wechat_redirect
+                        )
+
+                    [2] => Array
+                        (
+                            [title] => 住建部大动作！154家资质被举报！特级被撤！动态核查、挂证严查，建筑行业大整顿来了！
+                            [time] => 2019-03-07 19:00:33
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/SYjEZQHoiam4slLdIO9SDleG8fsZV8qCkYzOiaTacrWicNWFalibDCjicthm0PViaUJzInXIql1saHUTtCjNN2gSxUew/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965439&idx=1&sn=3ba4007e3f3448fca45784702d27da1c&chksm=8bca40c6bcbdc9d084820b4d68fe2d9d17267c33e0bbc7d2d8d1e7892ea41d70ce038c4ce080&scene=27#wechat_redirect
+                        )
+
+                    [3] => Array
+                        (
+                            [title] => 工地缺的是人才，而不是大爷！
+                            [time] => 2019-03-06 19:00:41
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/1OhZYJibic0VT5AQFxyEqzK53ndWUibozxe7Csvs99ynSOL2vQfnlgIibrNmgLQvT2R2BkcPaMYo4YnrV9YCAI3VdQ/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965437&idx=1&sn=6882d39c021996a7ccc0dd73b8135219&chksm=8bca40c4bcbdc9d2968a5a8158aea66d2080f2ce2ab2a69a78474a2d36e62da6e1e618ddc21e&scene=27#wechat_redirect
+                        )
+
+                    [4] => Array
+                        (
+                            [title] => 刚刚｜总理宣布：16%和10%税率分别下调至13%和9%，继续由三档向两档迈进！
+                            [time] => 2019-03-05 13:50:19
+                            [contentImg] => http://mmbiz.qpic.cn/mmbiz_jpg/oQ6jH4fyk7iccdJs8abUZCcic5y9bAqL2ES77YdfNeGrkT0J3Z08xd3eYgqlibgSHIOJhozIRHmW9laWN7QxRIs6w/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965431&idx=1&sn=928daa482ff81e40fb99b37dae9bc73c&chksm=8bca40cebcbdc9d893f6e99a0bf6d715fab80c1839653dba62d25e70f926cb1ad90e6ba8941c&scene=27#wechat_redirect
+                        )
+
+                    [5] => Array
+                        (
+                            [title] => 干工程、跟谁混，很重要！
+                            [time] => 2019-03-04 19:00:10
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/uef808mqMNLTluHkSHC3Y6cvKdXfz4CiaDWHxWUSGO5RA9cJSPfichMExLNcuic5bxDxR6xTVBMR4IkDXvBTEP57w/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965421&idx=1&sn=4dbdfd706241648ecfeb8a6df7c64683&chksm=8bca40d4bcbdc9c2f6cad500063526f3aeb2c01b9a562034ac477225097f7aa1b14ef8963479&scene=27#wechat_redirect
+                        )
+
+                    [6] => Array
+                        (
+                            [title] => 一员工提出辞职，老板问了他一个与离职无关的问题……
+                            [time] => 2019-03-03 20:09:43
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/xR6hGAYBBiaU0ssOu069pZZ7mmIib5sdcspgSqMHYzbvoHlciaRtKc1ic8TXzric0Q14XRDniavibZHkrA9ZIw7rClic2A/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965419&idx=1&sn=a2a153782e39c2860b43321fc9fec4cc&chksm=8bca40d2bcbdc9c4f56fe616bd47a0e2d013b301fb5c300e25a6ac47a1fc34ccbf5e75e0c1be&scene=27#wechat_redirect
+                        )
+
+                    [7] => Array
+                        (
+                            [title] => 普洱茶，切忌不懂装懂（建议收藏）
+                            [time] => 2019-03-02 18:23:07
+                            [contentImg] => https://mmbiz.qpic.cn/mmbiz_png/1OhZYJibic0VT6WaoTAV9PIcTv8JVVUqgTbga4Evqy3holCXNichjTBzahOyhwicjVciaykaKPsSBbsianwibFbw5FfeA/0?wx_fmt=png
+                            [introduce] => 众所周知，普洱茶具有很多功效，普洱茶可以减肥，清血脂，暖胃不伤胃，这点对熟普洱茶尤为明显。研究人员发现，晚饭
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965416&idx=1&sn=3fa4fd299256c72e4824d474cedd7745&chksm=8bca40d1bcbdc9c750a56df670a4d40f840c405d580cdbd9cc86926450736c07c1c7db2e4219&scene=27#wechat_redirect
+                        )
+
+                    [8] => Array
+                        (
+                            [title] => 住建部正式出台《建筑工人实名制管理办法》，3月1日起实施！
+                            [time] => 2019-03-01 19:00:30
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/oQ6jH4fyk78zkJxzRmnbnodE5ySnSutic1NpahpBDtN5vBNPH0DOo8sQHEWjgGnkK4z7iawqwMylcQsu1JpMIY7Q/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965412&idx=1&sn=15d213b5e928d012fe41663724015376&chksm=8bca40ddbcbdc9cbbc22895820aa996f044f730f5fdcbaf33c71dc7a85a8275c40a3d5c5e647&scene=27#wechat_redirect
+                        )
+
+                    [9] => Array
+                        (
+                            [title] => 工地请你来干嘛？（句句震撼）
+                            [time] => 2019-02-28 19:00:30
+                            [contentImg] => https://mmbiz.qlogo.cn/mmbiz_jpg/Y0K0AYibKibiboXFlsIaib79s1eJdmibjaWEaQe6ibQGibKSuPlwibWyKC6EQe6O7FPcic6qPicBb7M5dMdTztEDibeFm6rzQ/0?wx_fmt=jpeg
+                            [introduce] => 
+                            [url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965409&idx=1&sn=c55c3f9fe447ea7c469b4855eed98379&chksm=8bca40d8bcbdc9ce45a94e8034f23a2d4aaa372f4a1682ac6815cd022fecbe7886b509a6fa55&scene=27#wechat_redirect
+                        )
+
+                )
+
+            [newArticle_url] => https://mp.weixin.qq.com/s?__biz=MzA4NzI0MTc1MA==&mid=2650965443&idx=1&sn=4471fdf57d2d40cbacb1bda4f2442710&chksm=8bca40babcbdc9acb4584f087f4f5107116da18f532db94645873740193223ddf2201041a655&scene=27#wechat_redirect
+        )
+
+)
