@@ -1,7 +1,16 @@
 {extend name="layouts/cms"}
 
 {block name='body-content'}
-
+<a href="{:url('admin/new_article/getUrlAndTitle')}"  target="_blank">
+<button class="layui-btn layui-btn-normal">
+    <i class="layui-icon">&#xe608;</i> 最新文章采集
+</button>
+</a>
+<a href="{:url('admin/new_article/getViewAndAgree')}"  target="_blank">
+    <button class="layui-btn layui-btn-normal">
+        <i class="layui-icon">&#xe608;</i> 更新阅读量
+    </button>
+</a>
 <div class="layui-inline">
     <div class="layui-input-inline">
         <form class="form-search" action="{:url('admin/new_article/index')}" method="get">
@@ -21,8 +30,7 @@
     <colgroup>
         <col width="5%">
         <col width="5%">
-        <col width="10%">
-        <col width="10%">
+        <col width="20%">
         <col width="5%">
         <col width="5%">
         <col width="5%">
@@ -35,7 +43,6 @@
         <th>ID</th>
         <th>微信号</th>
         <th>标题</th>
-        <th>URL</th>
         <th>次序</th>
         <th>阅读量</th>
         <th>点赞量</th>
@@ -49,8 +56,7 @@
     <tr class="tr-article-{$vo['id']}">
         <td>{$vo['id']}</td>
         <td>{$vo['weixin_id']}</td>
-        <td>{$vo['title']}</td>
-        <td>{$vo['url']}</td>
+        <td><a href="{$vo['url']}" target="_blank">{$vo['title']}</a></td>
         <td>{$vo['article_idx']}</td>
         <td>{$vo['view_count']}</td>
         <td>{$vo['agree_count']}</td>
