@@ -53,6 +53,7 @@ class Articles extends BaseModel
      */
     public function getHotArticleList(){
         $res = $this
+            ->field('id,title')
             ->order('view','desc')
             ->limit(10)
             ->select()
@@ -133,7 +134,7 @@ class Articles extends BaseModel
 
         $where[] = array('id','>', $id);
 
-        $next_topic = $this->order('id asc')->where($where)->limit(1)->select()->toArray();
+        $next_topic = $this->field('id,title')->order('id asc')->where($where)->limit(1)->select()->toArray();
         if ($next_topic) {
             $next_topic = $next_topic[0];
         } else {
@@ -143,7 +144,7 @@ class Articles extends BaseModel
         // 上一篇查询条件
         array_pop($where);
         $where[] = array('id','<', $id);
-        $prev_topic = $this->order('id desc')->where($where)->limit(1)->select()->toArray();
+        $prev_topic = $this->field('id,title')->order('id desc')->where($where)->limit(1)->select()->toArray();
         if ($prev_topic) {
             $prev_topic = $prev_topic[0];
         } else {
@@ -287,7 +288,7 @@ class Articles extends BaseModel
     public function getArticlesForPage($curr_page,$limit = 10,$keyword = null,$cate_id = 0){
         $where['status'] = 1;
         if ($cate_id > 0)
-            $where['catalog1|catalog2'] = $type;
+            $where['catalog1|catalog2'] = $cate_id;
         $res = $this
             ->field('id,title,updated_at,picture,abstract,view,status,istop,ishot')
             ->where($where)

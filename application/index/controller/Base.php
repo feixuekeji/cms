@@ -28,7 +28,7 @@ class Base extends Controller
     {
 
         Hook::listen('response_send');
-        $this->checkToken();
+        //$this->checkToken();
     }
 
 

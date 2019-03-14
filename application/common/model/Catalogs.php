@@ -21,6 +21,7 @@ class Catalogs extends BaseModel
      */
     public function getCatalogList(){
         $data = $this
+            ->order(['pid'=>'asc','list_order'=>'desc','id'=>'asc'])
             ->select()
             ->toArray();
         return $data;
@@ -161,5 +162,51 @@ class Catalogs extends BaseModel
         }
         return $arr;
     }
+
+
+    /**
+     * Notes:格式化分类
+     * User: xxf
+     * Date: 2019/3/14
+     * Time: 17:04
+     * @param $action
+     * @param int $parent_id
+     * @return array
+     */
+        private function menuFormat($action, $parent_id = 0)
+    {
+        $tmp = [];
+        foreach ($action as $k => $v) {
+            if ($v['pid'] == $parent_id) {
+                $tmp[] = $v;
+                unset($action[$k]);
+            }
+        }
+
+        if (!empty($action)) {
+            foreach ($tmp as $k => $v) {
+                $children = $this->menuFormat($action, $v['id']);
+                if (!empty($children)) {
+                    $tmp[$k]['children'] = $children;
+                }
+            }
+        }
+        return $tmp;
+    }
+
+    /**
+     * Notes:菜单列表
+     * User: xxf
+     * Date: 2019/3/14
+     * Time: 17:03
+     * @return array
+     */
+        public function getMenu(){
+
+       $list = $this->getCatalogList();
+        $menu = $this->menuFormat($list);
+        return $menu;
+    }
+
 
 }
