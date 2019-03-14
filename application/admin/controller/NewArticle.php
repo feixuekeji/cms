@@ -55,6 +55,7 @@ class NewArticle extends CmsBase
 
     }
 
+
     /**
      * 更新点赞数
      * @return string
@@ -63,7 +64,7 @@ class NewArticle extends CmsBase
     {
 
         $data = $this->model->getViewAndAgree();
-        return $data;
+        return $data['msg'];
 
     }
 
@@ -77,7 +78,7 @@ class NewArticle extends CmsBase
         if ($request->isPost()){
             $curr_page = $request->post('curr_page',1);
             $search = $request->post('str_search');
-            $list = $this->model->getArticlesForPage($curr_page,$this->page_limit,$search);
+            $list = $this->model->getForPage($curr_page,$this->page_limit,$search);
             return showMsg(1,'success',$list);
         }else{
             return showMsg(0,'sorry，请求不合法');
@@ -97,6 +98,13 @@ class NewArticle extends CmsBase
             $opRes = $this->model->updateArticleData( $request->param());
             return showMsg($opRes['tag'],$opRes['message']);
         }
+    }
+
+
+    public function test(Request $request)
+    {
+        $token = $request->token('__token__', 'sha1');
+       return view();
     }
 
 

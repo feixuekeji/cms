@@ -136,6 +136,9 @@
                         url: "{:url('index/index/ajaxGetArticle',['id'=>$id])}" ,
                         type: 'get', //GET
                         async: true, //或false,是否异步
+                        beforeSend: function(request) {
+                                         request.setRequestHeader("Authorization", '11655');
+                                    },
                         dataType: 'json',
                         contentType: 'application/json',
                         success: function(jsondata) {

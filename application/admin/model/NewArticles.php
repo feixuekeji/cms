@@ -271,7 +271,7 @@ class NewArticles extends BaseModel
                 }
             }
             else{
-                Log::info('最新文章API异常：',$info);
+                Log::info('最新文章API异常：'.json_encode($info));
 
             }
 
@@ -288,17 +288,21 @@ class NewArticles extends BaseModel
         }
 
         $list = $this->getNewList();
+        static $num = 0;
         foreach ($list as $k => $v)
         {
             $info = $this->shenjianshou->getView($v['url']);
             if ($info['error_code'] == 0)
             {
                 $this->updateViewAndAgree($v['id'],$info['data']);
+                $num ++;
             }
             else{
                 Log::info('阅读量API异常'.json_encode($info));
             }
         }
+        $data['msg'] = "总更新".$num;
+        return $data;
     }
 
 

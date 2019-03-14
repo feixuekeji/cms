@@ -25,4 +25,7 @@ return [
     'log_write'    => [],
     // 应用结束
     'app_end'      => [],
+    'response_send' => [
+        'app\\index\\behavior\\CORS'
+    ],
 ];

@@ -284,9 +284,9 @@ class Articles extends BaseModel
      * @param null $search
      * @return array
      */
-    public function getArticlesForPage($curr_page,$limit = 10,$keyword = null,$type = 0){
+    public function getArticlesForPage($curr_page,$limit = 10,$keyword = null,$cate_id = 0){
         $where['status'] = 1;
-        if ($type > 0)
+        if ($cate_id > 0)
             $where['catalog1|catalog2'] = $type;
         $res = $this
             ->field('id,title,updated_at,picture,abstract,view,status,istop,ishot')

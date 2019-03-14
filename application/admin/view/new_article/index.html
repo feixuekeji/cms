@@ -106,7 +106,7 @@
 <script>
     //根据菜单ID 删除菜单记录
     function delArticle(id) {
-        var toUrl = "{:url('admin/article/edit',['id'=>'AID'])}";
+        var toUrl = "{:url('admin/new_article/edit',['id'=>'AID'])}";
         toUrl = toUrl.replace('AID', id);
         ToDelItem(id, toUrl, '.tr-article-' + id);
     }
@@ -118,22 +118,67 @@
 
     //添加导航菜单
     function addArticle() {
-        var toUrl = "{:url('admin/article/add')}";
+        var toUrl = "{:url('admin/new_article/add')}";
         ToOpenPopups(toUrl, '✚ 文章添加', '', '76%');
     }
 
     //根据菜单ID修改菜单信息
     function editArticle(id) {
-        var toUrl = "{:url('admin/article/edit',['id'=>'AID'])}";
+        var toUrl = "{:url('admin/new_article/edit',['id'=>'AID'])}";
         toUrl = toUrl.replace('AID', id);
         ToOpenPopups(toUrl, '✎ 文章修改', '', '76%');
     }
     //通过ajax 获取分页数据
     function ajaxOpForPage(curr_page) {
-        var toUrl = "{:url('admin/article/ajaxOpForPage')}";
+        var toUrl = "{:url('admin/new_article/ajaxOpForPage')}";
         $(".curr_page").val(curr_page);
         var postData = $(".form-search").serialize();
-        ToAjaxOpForPageArticles(toUrl, postData);
+        AjaxOpForPageArticles(toUrl, postData);
+    }
+
+
+    function AjaxOpForPageArticles(toUrl,postData) {
+        $.post(
+            toUrl,
+            postData,
+            function (result) {
+                if(result.status == 1){
+                    var str_html = '';
+                    $.each(result.data,function (i,e) {
+                        str_html +=
+                            "<tr class=\"tr-article-"+e.id+"\">\n" +
+                            "                <td>"+e.id+"</td>\n" +
+                            "                <td>"+e.weixin_id+"</td>\n" +
+                            "                <td><a href=\'"+e.url+"\' target=\"_blank\">"+e.title+"</a></td>\n" +
+                            "                <td>"+e.article_idx+"</td>\n" +
+                            "                <td>"+e.view_count+"</td>\n" +
+                            "                <td>"+e.agree_count+"</td>\n" +
+                            "                <td>"+e.publish_time+"</td>\n" +
+                            "                <td>"+e.update_time+"</td>\n" +
+                            "                <td>\n" +
+                            "                    <div class=\"layui-btn-group\">\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"editArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe642;</i>\n" +
+                            "                        </button>\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"delArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe640;</i>\n" +
+                            "                        </button>\n" +
+                            "                        <button class=\"layui-btn layui-btn-sm\"\n" +
+                            "                                onclick=\"addToArticle('"+e.id+"')\">\n" +
+                            "                            <i class=\"layui-icon\">&#xe605;</i>\n" +
+                            "                        </button>\n" +
+                            "                    </div>\n" +
+                            "                </td>\n" +
+                            "            </tr>";
+                    });
+                    $(".tbody-articles").html(str_html);
+                }else{
+                    //失败
+                    layer.msg(result.message);
+                }
+            },"JSON");
     }
 </script>
 {/block}

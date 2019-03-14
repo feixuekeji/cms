@@ -7,13 +7,14 @@ use app\common\model\Catalogs;
 use app\common\model\TodayWords;
 use think\Request;
 
-class Index
+class Index extends Base
 {
     private $articleModel;
     private $todayWordModel;
 
     public function __construct()
     {
+        parent::__construct();
         $this->articleModel = new Articles();
         $this->catalogModel = new Catalogs();
         $this->todayWordModel = new TodayWords();
@@ -56,16 +57,13 @@ class Index
 
         $articleList = $this->articleModel->getArticleList();
         $data = [
-            'name' => 'MoTzxx',
+
             'List' => $articleList,
         ];
         return view('review', $data);
     }
 
-    public function contact()
-    {
-        return view('contact');
-    }
+
 
     public function articleList()
     {
@@ -79,16 +77,16 @@ class Index
 
         $page = $request->param('page');
         $size = $request->param('size');
-        $type = $request->param('type');
+        $cate_id = $request->param('cate_id');
         $keyword = $request->param('keyword');
 
-        $articles = $this->articleModel->getArticlesForPage($page, $size, $keyword, $type);
-        $num = $this->articleModel->getArticlesCount($keyword, $type);
+        $articles = $this->articleModel->getArticlesForPage($page, $size, $keyword, $cate_id);
+        $num = $this->articleModel->getArticlesCount($keyword, $cate_id);
 
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $articles,
             'num' => $num,
         );
@@ -114,7 +112,8 @@ class Index
     public function articleDetail()
     {
         $data['id'] = input('id');
-        $this->articleModel->addView(intval(input('id')));
+
+        $data = $this->articleModel->addView(intval(input('id')));
 
         return view('article_detail', $data);
     }
@@ -137,8 +136,8 @@ class Index
 
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $articleInfo,
             'pre' => $preAndNext['pre'],
             'next' => $preAndNext['next'],
@@ -159,8 +158,8 @@ class Index
         $data = $this->articleModel->getPreAndNext($id, $catalog1, $catalog2);
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $data
         );
         exit(json_encode($result));
@@ -178,8 +177,8 @@ class Index
 
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $articleInfo
         );
         exit(json_encode($result));
@@ -206,8 +205,8 @@ class Index
 
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $articleInfo
         );
         exit(json_encode($result));
@@ -234,8 +233,8 @@ class Index
 
 
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $catalogs,
 
         );
@@ -253,8 +252,8 @@ class Index
         $articleInfo = $this->articleModel->getInfoByID(intval($id));
         $list = $this->articleModel->getSimilarList($articleInfo['title']);
         $result = array(
-            'status' => 0,
-            'message' => 0,
+            'code'=> 0,
+            'msg' => 'success',
             'data' => $list,
 
         );
