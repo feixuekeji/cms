@@ -87,6 +87,7 @@ class Token extends Controller
             $decoded = JWT::decode($jwt, $key, ['HS256']); //HS256方式，这里要和签发的时候对应
             $arr = (array)$decoded;
 
+
             $returndata['code']="200";//200=成功
             $returndata['msg']="success";//
             $returndata['data']=$arr;//返回的数据

@@ -23,6 +23,19 @@ Route::any('admin/menu/edit/:id','admin/navMenu/edit');
 Route::any('admin/menu/auth/:id','admin/navMenu/auth');
 Route::post('admin/menu/ajaxOpForPage','admin/navMenu/ajaxOpForPage');
 
+
+//前端接口
+Route::any('getToken','api/token/getToken');
+Route::any('getArticleList','index/index/getArticleList');
+Route::any('getArticleInfo','index/index/getArticleInfo');
+Route::any('getHotArticleList','index/index/getHotArticleList');
+Route::any('getSimilarList','index/index/getSimilarList');
+Route::any('getToken','index/index/getSimilarList');
+Route::any('getCatagory','index/index/getCatagory');
+Route::any('getArticleListByCatalog','index/index/getArticleListByCatalog');
+Route::any('getKeywordList','index/index/getKeywordList');
+
+
 return [
 
 ];

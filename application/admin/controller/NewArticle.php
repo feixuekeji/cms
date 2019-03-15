@@ -93,9 +93,9 @@ class NewArticle extends CmsBase
      * @param $id 文章ID
      * @return \think\response\View|void
      */
-    public function edit(Request $request,$id){
+    public function edit(Request $request){
         if ($request->isPost()){
-            $opRes = $this->model->updateArticleData( $request->param());
+            $opRes = $this->model->updateData( $request->param());
             return showMsg($opRes['tag'],$opRes['message']);
         }
     }

@@ -27,12 +27,24 @@ class Catalogs extends BaseModel
         return $data;
     }
 
-    public function getCatalogByPid($pid)
+    public function getCatalogByPid($pid = 0,$limit = null)
     {
-        $data = $this
-            ->where('pid',$pid)
-            ->select()
-            ->toArray();
+        if ($limit > 0)
+        {
+            $data = $this
+                ->where('pid',$pid)
+                ->order(['list_order'=>'desc'])
+                ->limit($limit)
+                ->select()
+                ->toArray();
+        }else{
+            $data = $this
+                ->where('pid',$pid)
+                ->order(['list_order'=>'desc'])
+                ->select()
+                ->toArray();
+        }
+
         return $data;
     }
 
@@ -207,6 +219,22 @@ class Catalogs extends BaseModel
         $menu = $this->menuFormat($list);
         return $menu;
     }
+
+    public function getMenuList()
+    {
+
+        $list = $this->getCatalogByPid();
+        if ($list) {
+            foreach ($list as $k => $v) {
+                $children_list = $this->getCatalogByPid($v['id']);
+                if ($children_list) {
+                    $list[$k]['children'] = $children_list;
+                }
+            }
+        }
+        return $list;
+    }
+
 
 
 }

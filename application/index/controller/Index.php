@@ -4,20 +4,21 @@ namespace app\index\controller;
 
 use app\common\model\Articles;
 use app\common\model\Catalogs;
-use app\common\model\TodayWords;
+use app\common\model\Keywords;
 use think\Request;
 
 class Index extends Base
 {
     private $articleModel;
-    private $todayWordModel;
+    private $catalogModel;
+    private $keywordModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->articleModel = new Articles();
         $this->catalogModel = new Catalogs();
-        $this->todayWordModel = new TodayWords();
+        $this->keywordModel = new Keywords();
     }
 
     /**
@@ -34,7 +35,7 @@ class Index extends Base
      * 文章列表页
      * @return \think\response\View
      */
-    public function review()
+/*    public function review()
     {
 
         $articleList = $this->articleModel->getArticleList();
@@ -43,7 +44,7 @@ class Index extends Base
             'List' => $articleList,
         ];
         return view('review', $data);
-    }
+    }*/
 
 
 
@@ -54,40 +55,61 @@ class Index extends Base
     }
 
 
+    /**
+     * Notes:文章列表
+     * User: xxf
+     * Date: 2019/3/15
+     * Time: 13:23
+     * @param Request $request
+     */
     public function getArticleList(Request $request)
     {
 
-        $page = $request->param('page');
-        $size = $request->param('size');
+        $page = $request->param('page',1);
+        $size = $request->param('size',15);
         $cate_id = $request->param('cate_id');
         $keyword = $request->param('keyword');
 
         $articles = $this->articleModel->getArticlesForPage($page, $size, $keyword, $cate_id);
         $num = $this->articleModel->getArticlesCount($keyword, $cate_id);
+        if ($num && $keyword)
+        {
+            //加入搜索记录
+            $this->keywordModel->addKeyword($keyword);
+        }
+        if ($num > 0)
+        {
+            $result = array(
+                'code'=> 0,
+                'msg' => 'success',
+                'data' => $articles,
+                'num' => $num,
+            );
+        }
+        else{
+            $result = array(
+                'code'=> 401,
+                'msg' => '没有符合条件的数据',
+                'data' => '',
+                'num' =>0,
+            );
+        }
 
-        $result = array(
-            'code'=> 0,
-            'msg' => 'success',
-            'data' => $articles,
-            'num' => $num,
-        );
+
+
         exit(json_encode($result));
     }
 
-    /**
-     * 文章详情页
-     * @param $id 文章ID
-     * @return \think\response\View
-     */
 
-    public function articleDetail(Request $request)
+
+ /*   public function articleDetail(Request $request)
     {
 
 
         $data = $this->articleModel->addView(intval(input('id')));
 
         return view('article_detail', $data);
-    }
+    }*/
 
 
     /**
@@ -95,20 +117,30 @@ class Index extends Base
      * @param $id 文章ID
      * @return \think\response\View
      */
-    public function ajaxGetArticle(Request $request)
+    public function getArticleInfo(Request $request)
     {
         $id = $request->param('id');
         $this->articleModel->addView(intval($id));
         $cate_id = $request->param('cate_id');
         $articleInfo = $this->articleModel->getInfoByID(intval($id));
+        if (!$articleInfo)
+        {
+            $result = array(
+                'code' => 402,
+                'msg' => '文章不存在',
+                'data' => '',
+            );
+            exit(json_encode($result));
+        }
+
+
         $preAndNext = $this->articleModel->getPreAndNext($id, $cate_id);
         $ctatalog1 = $this->catalogModel->getCatalogByID($articleInfo['catalog1']);
         $ctatalog2 = $this->catalogModel->getCatalogByID($articleInfo['catalog2']);
 
 
-
         $result = array(
-            'code'=> 0,
+            'code' => 0,
             'msg' => 'success',
             'data' => array(
                 'detail' => $articleInfo,
@@ -119,6 +151,7 @@ class Index extends Base
             ),
 
         );
+
         exit(json_encode($result));
 
     }
@@ -133,13 +166,22 @@ class Index extends Base
     {
 
         $articleInfo = $this->articleModel->getHotArticleList();
+        if (!empty($articleInfo))
+        {
+            $result = array(
+                'code'=> 0,
+                'msg' => 'success',
+                'data' => $articleInfo
+            );
+        } else {
+            $result = array(
+                'code' => 401,
+                'msg' => '没有符合条件的数据',
+                'data' => '',
+            );
+        }
 
 
-        $result = array(
-            'code'=> 0,
-            'msg' => 'success',
-            'data' => $articleInfo
-        );
         exit(json_encode($result));
 
     }
@@ -212,6 +254,16 @@ class Index extends Base
         {
             $v['list'] = $this->articleModel->getArticlesForPage($page, $size, '', $v['id']);
         }
+        if (!$catalogs)
+        {
+            $result = array(
+                'code'=> 403,
+                'msg' => '分类不存在',
+                'data' => '',
+
+            );
+            exit(json_encode($result));
+        }
 
 
 
@@ -242,8 +294,27 @@ class Index extends Base
         );
         exit(json_encode($result));
 
+    }
 
 
+    public function getKeywordList()
+    {
+        $list = $this->keywordModel->getKeywordList();
+        if ($list) {
+            $result = array(
+                'code' => 0,
+                'msg' => 'success',
+                'data' => $list,
+
+            );
+        } else {
+            $result = array(
+                'code' => 401,
+                'msg' => '没有符合条件的数据',
+                'data' => '',
+            );
+        }
+        exit(json_encode($result));
     }
 
 

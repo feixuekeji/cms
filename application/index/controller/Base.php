@@ -8,6 +8,7 @@
 
 namespace app\index\controller;
 
+use function Qiniu\explodeUpToken;
 use think\Controller;
 use think\facade\Session;
 use think\Request;
@@ -28,7 +29,7 @@ class Base extends Controller
     {
 
         Hook::listen('response_send');
-        //$this->checkToken();
+        $this->checkToken();
     }
 
 
@@ -49,9 +50,11 @@ class Base extends Controller
             exit(json_encode($res));
         }
         $token = $_SERVER['HTTP_AUTHORIZATION'];
-        //$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTI1Mzk3NDAsIm5iZiI6MTU1MjUzOTc0MCwic2NvcGVzIjoicm9sZV9hY2Nlc3MiLCJleHAiOjE1NTI1NDY5NDAsImRhdGEiOnsiaXAiOiIxMjcuMC4wLjEifX0.WEBP-MBOIOM86Au1Nnq-3plevfpK7OA3NDx3RiK7-E1c";
+        //$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTI2MTMxODMsIm5iZiI6MTU1MjYxMzE4Mywic2NvcGVzIjoicm9sZV9hY2Nlc3MiLCJleHAiOjE1NTI2MjAzODMsImRhdGEiOnsiaXAiOiIxMjcuMC4wLjEifX0.iN2YO9w6TQP3g4rc2-P9KpiHRj5UhRZ8MWyrkrZLIF8";
         $checkToken = action('api/token/checkToken',['jwt'=>$token]);
-        if ($checkToken['data']['ip']!= request()->ip())
+        $data = (array)$checkToken['data']['data'];
+        $ip = $data['ip'] ?? 0 ;
+        if ($ip!= request()->ip())
         {
             $res['code']="202";
             $res['msg']="ip不一致";

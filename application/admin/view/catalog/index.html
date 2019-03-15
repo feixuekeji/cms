@@ -91,7 +91,7 @@
 <script>
     //根据菜单ID 删除菜单记录
     function delAdmin(id) {
-        var toUrl = "{:url('admin/admin/edit',['id'=>'AdminID'])}";
+        var toUrl = "{:url('admin/catalog/edit',['id'=>'AdminID'])}";
         toUrl = toUrl.replace('AdminID', id);
         ToDelItem(id, toUrl, '.tr-item-' + id);
     }
@@ -103,7 +103,7 @@
 
     //通过ajax 获取分页数据
     function ajaxOpForPage(curr_page) {
-        var toUrl = "{:url('admin/admin/ajaxOpForPage')}";
+        var toUrl = "{:url('admin/catalog/ajaxOpForPage')}";
         $(".curr_page").val(curr_page);
         var postData = $(".form-search").serialize();
         ToAjaxOpForPageAdmins(toUrl, postData);

@@ -21,7 +21,7 @@ return [
     // 应用调试模式
     'app_debug'              => true,
     // 应用Trace
-    'app_trace'              => true,
+    'app_trace'              => false,
     // 是否支持多模块
     'app_multi_module'       => true,
     // 入口自动绑定模块
@@ -148,11 +148,12 @@ return [
     //'UPLOAD_DRIVER' => 'Local',
     // 七牛上传驱动配置说明
     'UPLOAD_Qiniu_CONFIG' => array(
-        'secretKey' => '97tAYC3JGesRs8PRya7SxkrURpz9k5bMLFgi-fzv', //七牛服务器
-        'accessKey' => 'VUq6Mm0wiPsca9TKmKl_A2S_t3S1Q4dnyXASf8WZ', //七牛用户
-        'domain'    => 'http://pnh74b4av.bkt.clouddn.com/', //七牛域名
-        'bucket'    => 'test', //空间名称
+        'secretKey' => 'XG_TqJoB4mJ-ohkvk_VgQMsiXv5QokFf8fEKOzK0', //七牛服务器
+        'accessKey' => '8yCCW5Hylg5Sbel6MHYjNuNL74_FwT1pn-Fu74A8', //七牛用户
+        'domain'    => 'http://cdnceshi.tujihome.com/', //七牛域名
+        'bucket'    => 'ceshi123', //空间名称
         'timeout'   => 3000, //超时时间
     ),
+    'CMS_PAGE_SIZE' => 15,
 
 ];

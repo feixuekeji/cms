@@ -35,7 +35,7 @@ return [
     // 模板参数
     'tpl_replace_string' => [ // 视图输出字符串内容替换
         '__CSS__'		=>	'/public/static/css',
-        '__IMGAGES__'		=>	'/public/static/imgages',
+        '__IMGAGES__'		=>	'/public/static/images',
         '__LIB__'		=>	'/public/static/lib',
         '__FONT__'		=>	'/public/static/font',
         '__UPLOAD__'		=>	'/public/uploads',
