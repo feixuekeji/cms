@@ -54,19 +54,19 @@ class Token extends Controller
 
             $json = JWT::encode($token,$key);
 
-            $returndata['code']="200";//
+            $returndata['status']="200";//
             $returndata['msg']='success';
             $returndata['token']= $json;//返回的数据
             return json_encode($returndata); //返回信息
 
 
         }catch(\Firebase\JWT\ExpiredException $e){  //签名不正确
-            $returndata['code']="104";//101=签名不正确
+            $returndata['status']="104";//101=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
             return json_encode($returndata); //返回信息
         }catch(\Exception $e) {  //其他错误
-            $returndata['code']="199";//199=签名不正确
+            $returndata['status']="199";//199=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
             return json_encode($returndata); //返回信息
@@ -88,33 +88,34 @@ class Token extends Controller
             $arr = (array)$decoded;
 
 
-            $returndata['code']="200";//200=成功
+            $returndata['status']="200";//200=成功
             $returndata['msg']="success";//
             $returndata['data']=$arr;//返回的数据
             return $returndata; //返回信息
 
         } catch(\Firebase\JWT\SignatureInvalidException $e) {  //签名不正确
 
-            $returndata['code']="101";//101=签名不正确
+            $returndata['status']="101";//101=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
             //return json_encode($returndata); //返回信息
-            exit(json_encode($returndata));
+            //exit(json_encode($returndata));
+            sendResponse($returndata,401,'Unauthorized');
         }catch(\Firebase\JWT\BeforeValidException $e) {  // 签名在某个时间点之后才能用
-            $returndata['code']="102";
+            $returndata['status']="102";
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
-            exit(json_encode($returndata)); //返回信息
+            sendResponse($returndata,401,'Unauthorized');
         }catch(\Firebase\JWT\ExpiredException $e) {  // token过期
-            $returndata['code']="103";//103=签名不正确
+            $returndata['status']="103";//103=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
-            exit(json_encode($returndata)); //返回信息
+            sendResponse($returndata,401,'Unauthorized');
         }catch(\Exception $e) {  //其他错误
-            $returndata['code']="199";//199=签名不正确
+            $returndata['status']="199";//199=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
-            exit(json_encode($returndata)); //返回信息
+            sendResponse($returndata,401,'Unauthorized');
         }
         //Firebase定义了多个 throw new，我们可以捕获多个catch来定义问题，catch加入自己的业务，比如token过期可以用当前Token刷新一个新Token
     }
@@ -132,32 +133,6 @@ class Token extends Controller
         //生成签名
         $json = action('createToken',['data'=>$data,'exp_time'=>$exp_time,'scopes'=>$scopes]);
         return $json;
-
-    }
-
-
-    public function index1(){
-
-
-        //生成签名
-
-
-        if (empty($_SERVER['HTTP_AUTHORIZATION']))
-        {
-            $res['code'] = 201;
-            return json_encode($res);
-        }
-
-
-        $res['code'] = 200;
-        $res['token'] = $_SERVER['HTTP_AUTHORIZATION'];
-        return json_encode($res);
-        //echo $json."<br>"; //返回给客户端token信息
-        //验证签名
-        /* $checkToken = action('checkToken',['jwt'=>$json]);
-         Header("HTTP/1.1 201 Created");
-         return $checkToken; //返回给客户端token信息*/
-
 
     }
 

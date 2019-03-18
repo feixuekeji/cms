@@ -97,3 +97,23 @@ function showMsg($status,$message = '',$data = array()){
     );
     exit(json_encode($result));
 }
+
+
+/**
+ * Notes:返回带状态码信息
+ * User: xxf
+ * Date: 2019/3/18
+ * Time: 16:29
+ * @param array $data
+ * @param int $code
+ * @param string $message
+ */
+function sendResponse($data = [],$code = 200,$message = 'ok')
+{
+    $HTTP_VERSION = "HTTP/1.1";
+    //输出结果
+    header($HTTP_VERSION . " " . $code . " " . $message);
+    header("Content-Type: application/json");
+    exit(json_encode($data));
+}
+

@@ -38,7 +38,7 @@ class Login
         if (Session::has('AID')){
             Session::delete('AID');
         }
-        return redirect('admin/login/login');
+        return redirect('admin/login/index');
     }
     /**
      * ajax 进行管理员的登录操作
@@ -57,10 +57,6 @@ class Login
         }
     }
 
-    public function test()
-    {
-
-    }
 
     /**
      * ajax 检查登录状态

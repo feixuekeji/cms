@@ -241,20 +241,26 @@ class Admins extends BaseModel
         $message = "登录成功";
         $userName = isset($input['user_name'])?$input['user_name']:'';
         $pwd = isset($input['password'])?$input['password']:'';
+        $verifyCode = isset($input['login_verifyCode'])?$input['login_verifyCode']:'';
+        //首先判断验证码是否可用
+        if(!captcha_check($verifyCode)){
+            $message = "验证码填写有误或已过期";
+        }else {
             $res = $this
                 ->field('password,id')
-                ->where('user_name',$userName)
-                ->where('status',1)
+                ->where('user_name', $userName)
+                ->where('status', 1)
                 ->find();
-            if ($res){
-                if ($res->password == md5(base64_encode($pwd))){
+            if ($res) {
+                if ($res->password == md5(base64_encode($pwd))) {
                     $flag = $res->id;
-                }else{
-                   $message = "登录失败，请检查您的信息";
+                } else {
+                    $message = "登录失败，请检查您的信息";
                 }
-            }else{
+            } else {
                 $message = "该用户名不存在";
             }
+        }
 
         return [
             'tag' => $flag,

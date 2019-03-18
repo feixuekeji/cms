@@ -53,7 +53,7 @@ class Articles extends BaseModel
      */
     public function getHotArticleList(){
         $res = $this
-            ->field('id,title')
+            ->field('id,title,abstract')
             ->order('view','desc')
             ->limit(10)
             ->select()

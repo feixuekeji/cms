@@ -149,7 +149,7 @@ class Collect extends CmsBase
 
 
         $data = array('content'=>$content,'title'=>$title,'wxgzh' =>$wxgzh,'picture' => $picture);
-        //return json_encode(array('data'=>$data,'code'=>200,'msg'=>'ok'));
+        //return json_encode(array('data'=>$data,'status'=>200,'msg'=>'ok'));
         return $data;
     }
 

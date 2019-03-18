@@ -11,6 +11,7 @@ namespace app\index\controller;
 use function Qiniu\explodeUpToken;
 use think\Controller;
 use think\facade\Session;
+use think\facade\Log;
 use think\Request;
 use think\facade\Hook;
 
@@ -44,10 +45,10 @@ class Base extends Controller
     {
         if (empty($_SERVER['HTTP_AUTHORIZATION']))
         {
-            $res['code']="201";
+            $res['status']="201";
             $res['msg']="no token";
             $res['data']="";//返回的数据
-            exit(json_encode($res));
+            sendResponse($res,401,'Unauthorized');
         }
         $token = $_SERVER['HTTP_AUTHORIZATION'];
         //$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTI2MTMxODMsIm5iZiI6MTU1MjYxMzE4Mywic2NvcGVzIjoicm9sZV9hY2Nlc3MiLCJleHAiOjE1NTI2MjAzODMsImRhdGEiOnsiaXAiOiIxMjcuMC4wLjEifX0.iN2YO9w6TQP3g4rc2-P9KpiHRj5UhRZ8MWyrkrZLIF8";
@@ -56,10 +57,10 @@ class Base extends Controller
         $ip = $data['ip'] ?? 0 ;
         if ($ip!= request()->ip())
         {
-            $res['code']="202";
+            $res['status']="202";
             $res['msg']="ip不一致";
             $res['data']="";//返回的数据
-            exit(json_encode($res));
+            sendResponse($res,401,'Unauthorized');
         }
 
     }

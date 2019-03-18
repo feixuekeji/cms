@@ -23,7 +23,7 @@
                     <input type="text" name="login_verifyCode" required
                            class="layui-input input-verifyCode" placeholder="请输入验证码">
                 <br/>
-                    <span class="span-img-verifyCode" style="height: 30px">{:captcha_img()}</span>
+                    <span class="span-img-verifyCode" style="height: 30px"><img src="{:captcha_src()}" alt="captcha" onclick="this.src='{:captcha_src()}'"></span>
                 </div>
 
                 <div class="layui-form-item">

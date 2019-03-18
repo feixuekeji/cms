@@ -91,8 +91,8 @@ class Catalogs extends BaseModel
     public function getCatalogByID($id){
         $res = $this
             ->where('id',$id)
-            ->find()
-            ->toArray();
+            ->find();
+        isset($res)?$res->toArray():[];
         return $res;
     }
 

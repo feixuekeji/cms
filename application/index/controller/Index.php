@@ -5,7 +5,9 @@ namespace app\index\controller;
 use app\common\model\Articles;
 use app\common\model\Catalogs;
 use app\common\model\Keywords;
+use think\facade\Log;
 use think\Request;
+use think\facade\Cache;
 
 class Index extends Base
 {
@@ -69,7 +71,6 @@ class Index extends Base
         $size = $request->param('size',15);
         $cate_id = $request->param('cate_id');
         $keyword = $request->param('keyword');
-
         $articles = $this->articleModel->getArticlesForPage($page, $size, $keyword, $cate_id);
         $num = $this->articleModel->getArticlesCount($keyword, $cate_id);
         if ($num && $keyword)
@@ -80,7 +81,7 @@ class Index extends Base
         if ($num > 0)
         {
             $result = array(
-                'code'=> 0,
+                'status'=> 0,
                 'msg' => 'success',
                 'data' => $articles,
                 'num' => $num,
@@ -88,11 +89,12 @@ class Index extends Base
         }
         else{
             $result = array(
-                'code'=> 401,
+                'status'=> 401,
                 'msg' => '没有符合条件的数据',
                 'data' => '',
                 'num' =>0,
             );
+            sendResponse($result,400,'INVALID REQUEST');
         }
 
 
@@ -122,15 +124,20 @@ class Index extends Base
         $id = $request->param('id');
         $this->articleModel->addView(intval($id));
         $cate_id = $request->param('cate_id');
-        $articleInfo = $this->articleModel->getInfoByID(intval($id));
+        $articleInfo = Cache::store('redis')->get('article'.$id);
+        if (!$articleInfo){
+            $articleInfo = $this->articleModel->getInfoByID(intval($id));
+            if ($articleInfo)
+            Cache::store('redis')->set('article'.$id,$articleInfo,7200);
+        }
         if (!$articleInfo)
         {
             $result = array(
-                'code' => 402,
+                'status' => 402,
                 'msg' => '文章不存在',
                 'data' => '',
             );
-            exit(json_encode($result));
+            sendResponse($result,400,'INVALID REQUEST');
         }
 
 
@@ -140,7 +147,7 @@ class Index extends Base
 
 
         $result = array(
-            'code' => 0,
+            'status' => 0,
             'msg' => 'success',
             'data' => array(
                 'detail' => $articleInfo,
@@ -169,16 +176,17 @@ class Index extends Base
         if (!empty($articleInfo))
         {
             $result = array(
-                'code'=> 0,
+                'status'=> 0,
                 'msg' => 'success',
                 'data' => $articleInfo
             );
         } else {
             $result = array(
-                'code' => 401,
+                'status' => 401,
                 'msg' => '没有符合条件的数据',
                 'data' => '',
             );
+            sendResponse($result,400,'INVALID REQUEST');
         }
 
 
@@ -206,7 +214,7 @@ class Index extends Base
 
 
         $result = array(
-            'code'=> 0,
+            'status'=> 0,
             'msg' => 'success',
             'data' => $articleInfo
         );
@@ -228,7 +236,7 @@ class Index extends Base
         $list = $this->catalogModel->getMenu();
 
         $result = array(
-            'code'=> 0,
+            'status'=> 0,
             'msg' => 'success',
             'data' => $list
         );
@@ -257,18 +265,18 @@ class Index extends Base
         if (!$catalogs)
         {
             $result = array(
-                'code'=> 403,
+                'status'=> 403,
                 'msg' => '分类不存在',
                 'data' => '',
 
             );
-            exit(json_encode($result));
+            sendResponse($result,401,'INVALID REQUEST');
         }
 
 
 
         $result = array(
-            'code'=> 0,
+            'status'=> 0,
             'msg' => 'success',
             'data' => $catalogs,
 
@@ -287,7 +295,7 @@ class Index extends Base
         $articleInfo = $this->articleModel->getInfoByID(intval($id));
         $list = $this->articleModel->getSimilarList($articleInfo['title']);
         $result = array(
-            'code'=> 0,
+            'status'=> 0,
             'msg' => 'success',
             'data' => $list,
 
@@ -302,17 +310,18 @@ class Index extends Base
         $list = $this->keywordModel->getKeywordList();
         if ($list) {
             $result = array(
-                'code' => 0,
+                'status' => 0,
                 'msg' => 'success',
                 'data' => $list,
 
             );
         } else {
             $result = array(
-                'code' => 401,
+                'status' => 401,
                 'msg' => '没有符合条件的数据',
                 'data' => '',
             );
+            sendResponse($result,400,'INVALID REQUEST');
         }
         exit(json_encode($result));
     }

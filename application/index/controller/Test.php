@@ -304,6 +304,16 @@ public function test()
         $p = $this->redis->lrange('d1_list',0,5);
     }
 
+    public function redis1(){
+
+        $data['id'] = 1;
+        $data['tttt'] = 2;
+        Cache::store('redis')->set('sfdsf', $data,1000000);
+        $a = Cache::store('redis')->get('sfdsf');
+        $b = Cache::store('redis')->clear();
+        var_dump($b);
+    }
+
 
 
     public function test1()

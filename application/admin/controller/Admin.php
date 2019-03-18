@@ -7,6 +7,7 @@ use app\common\model\AdminRoles;
 use app\common\model\Admins;
 use app\common\model\NavMenus;
 use think\Request;
+use think\facade\Cache;
 
 class Admin extends CmsBase
 {
@@ -151,6 +152,21 @@ class Admin extends CmsBase
                 'menuSelf' => $arrMenuSelf,
             ]);
         }
+    }
+
+
+    /**
+     * Notes:清空缓存
+     * User: xxf
+     * Date: 2019/3/18
+     * Time: 15:14
+     * @return string
+     */
+    public function clear()
+    {
+        $res = Cache::store('redis')->clear();
+        if ($res)
+            return "已清空";
     }
 
 
