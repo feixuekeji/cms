@@ -223,7 +223,7 @@ class Catalogs extends BaseModel
     public function getMenuList()
     {
 
-        $list = $this->getCatalogByPid();
+        $list = $this->getCatalogByPid(0,6);
         if ($list) {
             foreach ($list as $k => $v) {
                 $children_list = $this->getCatalogByPid($v['id']);

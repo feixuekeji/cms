@@ -28,6 +28,8 @@ class Index extends Base
      * @return \think\response\View
      */
 
+
+
     public function index()
     {
         return view('index');
@@ -124,13 +126,13 @@ class Index extends Base
         $id = $request->param('id');
         $this->articleModel->addView(intval($id));
         $cate_id = $request->param('cate_id');
-        $articleInfo = Cache::store('redis')->get('article'.$id);
+        $articleInfo = Cache::store('redis')->get('article'.intval($id));
         if (!$articleInfo){
             $articleInfo = $this->articleModel->getInfoByID(intval($id));
             if ($articleInfo)
             Cache::store('redis')->set('article'.$id,$articleInfo,7200);
         }
-        if (!$articleInfo)
+        if (empty($articleInfo))
         {
             $result = array(
                 'status' => 402,
@@ -233,7 +235,7 @@ class Index extends Base
     public function getCatagory(Request $request)
     {
 
-        $list = $this->catalogModel->getMenu();
+        $list = $this->catalogModel->getMenuList();
 
         $result = array(
             'status'=> 0,

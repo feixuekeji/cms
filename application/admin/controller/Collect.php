@@ -3,7 +3,6 @@ namespace app\admin\Controller;
 use app\common\controller\CmsBase;
 use app\common\model\Collects;
 use app\common\model\Catalogs;
-use app\api\Controller\Upload;
 use think\Request;
 use think\facade\Env;
 use think\facade\Log;
@@ -12,12 +11,13 @@ class Collect extends CmsBase
 {
     private $model ;
     private $page_limit;
+    private $upload;
+    private $catalogModel;
     public function __construct()
     {
         parent::__construct();
         $this->model = new Collects();
         $this->catalogModel = new Catalogs();
-        $this->upload = new Upload();
         $this->page_limit = config('app.CMS_PAGE_SIZE');
     }
 
@@ -74,7 +74,7 @@ class Collect extends CmsBase
             $url = $request->post('url');
 
 
-                $data = $this->get_file_article(trim($url));
+                $data = $this->model->get_file_article(trim($url));
                 if ($data)
                 {
                     $this->model->addArticle($data);
@@ -86,71 +86,6 @@ class Collect extends CmsBase
         }else {
             return view('url');
         }
-    }
-
-
-    /**采集
-     * @param $url
-     * @return array|bool
-     */
-    function get_file_article($url)
-    {
-
-        $file = get_url($url);
-        if(!$file){
-            Log::error('错误信息'.'url错误');
-            return false;
-        }
-        // 内容
-        preg_match('/<div class="rich_media_content " id="js_content">[\s\S]*?<\/div>/',$file,$content);
-        if (empty($content[0]))
-            return false;
-        // 标题
-        preg_match('/<title>([\s\S]*?)<\/title>/',$file,$title);
-        $title = $title?$title[1]:'';
-        $title = trim($title);
-        //微信公众号
-        preg_match('/var nickname = "([\s\S]*?)"/',$file,$wxgzh);
-        $wxgzh = $wxgzh?$wxgzh[1]:'';
-        //封面图片
-        preg_match('/var msg_cdn_url = "([\s\S]*?)"/',$file,$picture);
-        $picture = $picture?$picture[1]:'';
-        $picture = $this->upload->qiniuFetch($picture);
-
-
-
-        // 图片
-        preg_match_all('/<img.*?data-src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png|\.jpeg|\.?]))[\'|\"].*?[\/]?>/',$content[0],$images);
-        // 储存原地址和下载后地址
-        $old = array();
-        $new = array();
-        // 去除重复图片地址
-        $images = array_unique($images[1]);
-
-        if($images){
-            foreach($images as $v){
-
-                $filename = $this->upload->qiniuFetch($v);
-                if($filename){
-                    // 图片保存成功 替换地址
-                    $old[] = $v;
-                    $new[] = $filename;
-                }else{
-                    // 失败记录日志
-                    Log::error('错误信息'.$v);
-
-                }
-            }
-            $old[] = 'data-src';
-            $new[] = 'src';
-            $content = str_replace($old,$new,$content[0]);
-
-        }
-
-
-        $data = array('content'=>$content,'title'=>$title,'wxgzh' =>$wxgzh,'picture' => $picture);
-        //return json_encode(array('data'=>$data,'status'=>200,'msg'=>'ok'));
-        return $data;
     }
 
     /**

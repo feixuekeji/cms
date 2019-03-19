@@ -1,12 +1,20 @@
 <?php
 namespace app\common\model;
+
 use think\Db;
 use \think\Model;
 use think\facade\Session;
-
+use api\Upload;
 
 class Collects extends BaseModel
 {
+    private $uploads;
+
+    public function __construct($data = [])
+    {
+        parent::__construct($data);
+        $this->uploads = new Upload();
+    }
 
     /**
      * 获取所有的文章
@@ -145,5 +153,70 @@ class Collects extends BaseModel
             ->select();
 
         return $res->toArray();
+    }
+
+
+    /**采集
+     * @param $url
+     * @return array|bool
+     */
+    function get_file_article($url)
+    {
+
+        $file = get_url($url);
+        if(!$file){
+            Log::error('错误信息'.'url错误');
+            return false;
+        }
+        // 内容
+        preg_match('/<div class="rich_media_content " id="js_content">[\s\S]*?<\/div>/',$file,$content);
+        if (empty($content[0]))
+            return false;
+        // 标题
+        preg_match('/<title>([\s\S]*?)<\/title>/',$file,$title);
+        $title = $title?$title[1]:'';
+        $title = trim($title);
+        //微信公众号
+        preg_match('/var nickname = "([\s\S]*?)"/',$file,$wxgzh);
+        $wxgzh = $wxgzh?$wxgzh[1]:'';
+        //封面图片
+        preg_match('/var msg_cdn_url = "([\s\S]*?)"/',$file,$picture);
+        $picture = $picture?$picture[1]:'';
+        $picture = $this->upload->qiniuFetch($picture);
+
+
+
+        // 图片
+        preg_match_all('/<img.*?data-src=[\'|\"](.*?(?:[\.gif|\.jpg|\.png|\.jpeg|\.?]))[\'|\"].*?[\/]?>/',$content[0],$images);
+        // 储存原地址和下载后地址
+        $old = array();
+        $new = array();
+        // 去除重复图片地址
+        $images = array_unique($images[1]);
+
+        if($images){
+            foreach($images as $v){
+
+                $filename = $this->upload->qiniuFetch($v);
+                if($filename){
+                    // 图片保存成功 替换地址
+                    $old[] = $v;
+                    $new[] = $filename;
+                }else{
+                    // 失败记录日志
+                    Log::error('错误信息'.$v);
+
+                }
+            }
+            $old[] = 'data-src';
+            $new[] = 'src';
+            $content = str_replace($old,$new,$content[0]);
+
+        }
+
+
+        $data = array('content'=>$content,'title'=>$title,'wxgzh' =>$wxgzh,'picture' => $picture);
+        //return json_encode(array('data'=>$data,'status'=>200,'msg'=>'ok'));
+        return $data;
     }
 }

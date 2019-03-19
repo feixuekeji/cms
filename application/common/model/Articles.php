@@ -35,6 +35,7 @@ class Articles extends BaseModel
         $all_list = $this
             ->field('id,title')
             ->where('id','>',0)
+            ->where('title','<>',$title)
             ->where('status',1)
             ->select()
             ->toArray();

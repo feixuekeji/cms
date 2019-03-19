@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" src="//cdn.staticfile.org/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+
+    $.ajax({
+        type: "GET",
+        url: " http://word.tujihome.com/index.php/getArticleInfo/id/29",
+        headers: {
+            'Authorization' : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTI5Nzc3NzcsIm5iZiI6MTU1Mjk3Nzc3Nywic2NvcGVzIjoicm9sZV9hY2Nlc3MiLCJleHAiOjE1NTI5ODQ5NzcsImRhdGEiOnsiaXAiOiIyMjIuOTAuODYuMjE2In19.fiV-RLpJAz0p-eER88aBEu1O3ENTVnX7Gh5BNyZpmOY'
+        },
+        success: function(msg){
+            alert( "Data Saved: " + msg );
+        }
+    });
+</script>
+</body>
+</html>

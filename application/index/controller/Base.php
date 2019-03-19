@@ -43,6 +43,9 @@ class Base extends Controller
      */
     public function checkToken()
     {
+        /*if (request()->isOptions()) {
+            sendResponse('',200,'ok');
+        }*/
         if (empty($_SERVER['HTTP_AUTHORIZATION']))
         {
             $res['status']="201";
@@ -54,7 +57,7 @@ class Base extends Controller
         //$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NTI2MTMxODMsIm5iZiI6MTU1MjYxMzE4Mywic2NvcGVzIjoicm9sZV9hY2Nlc3MiLCJleHAiOjE1NTI2MjAzODMsImRhdGEiOnsiaXAiOiIxMjcuMC4wLjEifX0.iN2YO9w6TQP3g4rc2-P9KpiHRj5UhRZ8MWyrkrZLIF8";
         $checkToken = action('api/token/checkToken',['jwt'=>$token]);
         $data = (array)$checkToken['data']['data'];
-        $ip = $data['ip'] ?? 0 ;
+        $ip = $data['ip'] ? $data['ip'] : 0 ;
         if ($ip!= request()->ip())
         {
             $res['status']="202";

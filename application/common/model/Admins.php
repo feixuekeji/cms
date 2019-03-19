@@ -188,7 +188,7 @@ class Admins extends BaseModel
                 $validateRes = $this->validate($this->validate, $saveData, $tokenData);
                 if ($validateRes['tag']){
                     if ($input['password']){
-                        //TODO 如果输入了新密码
+                        //如果输入了新密码
                         $saveData['password'] = md5(base64_encode($input['password']));
                     }
                     $tag = $this

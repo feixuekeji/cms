@@ -18,7 +18,7 @@ class CORS
         header('Access-Control-Allow-Headers:*');
         header('Access-Control-Allow-Credentials:false');
         if (request()->isOptions()) {
-            return json(200, 200);
+            sendResponse('',200,'ok');
         }
 
     }
