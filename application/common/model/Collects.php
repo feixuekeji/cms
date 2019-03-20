@@ -4,7 +4,8 @@ namespace app\common\model;
 use think\Db;
 use \think\Model;
 use think\facade\Session;
-use api\Upload;
+//use api\Upload;
+use app\api\Controller\Upload;
 
 class Collects extends BaseModel
 {
@@ -175,7 +176,7 @@ class Collects extends BaseModel
         // 标题
         preg_match('/<title>([\s\S]*?)<\/title>/',$file,$title);
         $title = $title?$title[1]:'';
-        $title = trim($title);
+        $title =  htmlspecialchars_decode(trim($title));
         //微信公众号
         preg_match('/var nickname = "([\s\S]*?)"/',$file,$wxgzh);
         $wxgzh = $wxgzh?$wxgzh[1]:'';
