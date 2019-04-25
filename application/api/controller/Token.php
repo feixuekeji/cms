@@ -4,7 +4,6 @@ namespace app\api\Controller;
 
 use think\Controller;
 use think\facade\Request;
-use Config;
 use Firebase\JWT\JWT;
 
 /**token类
@@ -80,14 +79,10 @@ class Token extends Controller
      */
     public function checkToken($jwt){
         $key=$this->TokenKey;
-
-        //$jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC93d3cuZm4zMjEuY29tfEZuZWR1Y21zIiwiYXVkIjoiaHR0cDpcL1wvd3d3LmZuMzIxLmNvbXxGbmVkdWNtcyIsImlhdCI6MTU0MTc1NDQ4MiwibmJmIjoxNTQxNzU0NDgyLCJzY29wZXMiOiJyb2xlX2FjY2VzcyIsImV4cCI6MTU0MTc2MTY4MiwiZGF0YSI6eyJ1c2VyaWQiOjIxLCJ1c2VybmFtZSI6Ilx1Njc0ZVx1NWMwZlx1OWY5OSJ9fQ.eSWijLKzIBpS--wPhtL7zUn-ConFA69-FdpfqfDVtpM";
         try {
             JWT::$leeway = 60;//当前时间减去60，把时间留点余地
             $decoded = JWT::decode($jwt, $key, ['HS256']); //HS256方式，这里要和签发的时候对应
             $arr = (array)$decoded;
-
-
             $returndata['status']="200";//200=成功
             $returndata['msg']="success";//
             $returndata['data']=$arr;//返回的数据
@@ -98,8 +93,6 @@ class Token extends Controller
             $returndata['status']="101";//101=签名不正确
             $returndata['msg']=$e->getMessage();
             $returndata['data']="";//返回的数据
-            //return json_encode($returndata); //返回信息
-            //exit(json_encode($returndata));
             sendResponse($returndata,401,'Unauthorized');
         }catch(\Firebase\JWT\BeforeValidException $e) {  // 签名在某个时间点之后才能用
             $returndata['status']="102";
@@ -117,7 +110,6 @@ class Token extends Controller
             $returndata['data']="";//返回的数据
             sendResponse($returndata,401,'Unauthorized');
         }
-        //Firebase定义了多个 throw new，我们可以捕获多个catch来定义问题，catch加入自己的业务，比如token过期可以用当前Token刷新一个新Token
     }
 
 

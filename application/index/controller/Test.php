@@ -101,9 +101,7 @@ class Test extends Controller
 
     public function test()
     {
-        $a = 'var nickname = "21世纪经济报道";';
-	preg_match('/var nickname = "[\s\S]*?"/',$a,$wxgzh);
-	var_dump($wxgzh);
+        return json(['data'=>array(),'error'=>1,'message'=>'此管理员不存在']);
     }
 
 

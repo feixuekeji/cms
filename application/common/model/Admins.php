@@ -97,7 +97,7 @@ class Admins extends BaseModel
      * @return int|void
      */
     public function addAdmin($input){
-        $user_name = isset($input['user_name'])?$input['user_name']:'';
+        $user_name = isset($input['admin_name'])?$input['admin_name']:'';
         $sameTag = $this->chkSameUserName($user_name);
         if ($sameTag){
             $validateRes['tag'] = 0;
