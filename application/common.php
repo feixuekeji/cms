@@ -43,9 +43,10 @@ function get_content_from_url($url)
  */
 function get_url($url)
 {
-    $ifpost = 0;
-    $datafields = '';
-    $cookiefile = '';
+    $ifpost = 0;//是否post请求
+    $datafields = '';//post数据
+    $cookiefile = '';//cookie文件
+    $cookie = '';//cookie变量
     $v = false;
     //构造随机ip
     $ip_long = array(
@@ -72,8 +73,9 @@ function get_url($url)
     $ifpost && curl_setopt($ch, CURLOPT_POSTFIELDS, $datafields);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    $cookiefile && curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);
-    $cookiefile && curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);
+    $cookie && curl_setopt($ch, CURLOPT_COOKIE, $cookie);//发送cookie变量
+    $cookiefile && curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiefile);//发送cookie文件
+    $cookiefile && curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiefile);//写入cookie到文件
     curl_setopt($ch,CURLOPT_TIMEOUT,60); //允许执行的最长秒数
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
